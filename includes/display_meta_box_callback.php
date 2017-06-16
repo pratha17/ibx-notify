@@ -5,7 +5,7 @@
      $ibx_notify_config_active = isset( $values['ibx-notify-config-active'] ) ? esc_attr( $values['ibx-notify-config-active'][0] ) : '';
      $ibx_notify_config_hide_button = isset( $values['ibx-notify-config-hide-button'] ) ? esc_attr( $values['ibx-notify-config-hide-button'][0] ) : '';
      $ibx_notify_type = isset( $values['ibx_notify_type'] ) ? esc_attr( $values['ibx_notify_type'][0] ) : '';
-     $ibx_notify_notification_bar_description = isset( $values['ibx_notify_notification_bar_description'] ) ? esc_attr( $values['ibx_notify_notification_bar_description'][0] ) : '';
+     $ibx_notify_notification_bar_description = isset( $values['ibx_notify_notification_bar_description'] ) ? html_entity_decode( $values['ibx_notify_notification_bar_description'][0] ) : '';
      $ibx_notify_enable_countdown = isset( $values['ibx_notify_enable_countdown'] ) ? esc_attr( $values['ibx_notify_enable_countdown'][0] ) : '';
      $ibx_notify_notification_bar_countdown_text = isset( $values['ibx_notify_notification_bar_countdown_text'] ) ? esc_attr( $values['ibx_notify_notification_bar_countdown_text'][0] ) : '';
      $ibx_notify_notification_bar_countdown_days = isset( $values['ibx_notify_notification_bar_countdown_days'] ) ? esc_attr( $values['ibx_notify_notification_bar_countdown_days'][0] ) : '';
@@ -15,7 +15,7 @@
      $ibx_notify_enable_notification_email = isset( $values['ibx-notify-enable-notification-email'] ) ? esc_attr( $values['ibx-notify-enable-notification-email'][0] ) : '';
      $ibx_notify_notification_email = isset( $values['ibx-notify-notification-email'] ) ? esc_attr( $values['ibx-notify-notification-email'][0] ) : '';
      $ibx_notify_email_type = isset( $values['ibx_notify_email_type'] ) ? esc_attr( $values['ibx_notify_email_type'][0] ) : '';
-     $ibx_notify_email_def_msg = isset( $values['ibx_notify_email_def_msg'] ) ? esc_attr( $values['ibx_notify_email_def_msg'][0] ) : '';
+     $ibx_notify_email_def_msg = isset( $values['ibx_notify_email_def_msg'] ) ? html_entity_decode( $values['ibx_notify_email_def_msg'][0] ) : '';
      $ibx_notify_email_def_place = isset( $values['ibx_notify_email_def_place'] ) ? esc_attr( $values['ibx_notify_email_def_place'][0] ) : '';
      $ibx_notify_email_def_sendmail = isset( $values['ibx_notify_email_def_sendmail'] ) ? esc_attr( $values['ibx_notify_email_def_sendmail'][0] ) : '';
      $ibx_notify_email_def_conmsg = isset( $values['ibx_notify_email_def_conmsg'] ) ? esc_attr( $values['ibx_notify_email_def_conmsg'][0] ) : '';
@@ -25,10 +25,8 @@
      $ibx_notify_email_mailchimp_conmsg = isset( $values['ibx_notify_email_mailchimp_conmsg'] ) ? esc_attr( $values['ibx_notify_email_mailchimp_conmsg'][0] ) : '';
      $ibx_notify_email_cust_msg = isset( $values['ibx_notify_email_cust_msg'] ) ? esc_attr( $values['ibx_notify_email_cust_msg'][0] ) : '';
      $ibx_notify_email_cust_conmsg = isset( $values['ibx_notify_email_cust_conmsg'] ) ? esc_attr( $values['ibx_notify_email_cust_conmsg'][0] ) : '';
-     $ibx_notify_cust_msg_msg = isset( $values['ibx_notify_cust_msg_msg'] ) ? esc_attr( $values['ibx_notify_cust_msg_msg'][0] ) : '';
-     $ibx_notify_cust_msg_conmsg = isset( $values['ibx_notify_cust_msg_conmsg'] ) ? esc_attr( $values['ibx_notify_cust_msg_conmsg'][0] ) : '';
-     $ibx_notify_cust_msg_place = isset( $values['ibx_notify_cust_msg_place'] ) ? esc_attr( $values['ibx_notify_cust_msg_place'][0] ) : '';
-     $ibx_notify_sale_msg = isset( $values['ibx_notify_sale_msg'] ) ? esc_attr( $values['ibx_notify_sale_msg'][0] ) : '';
+     $ibx_notify_cust_msg_msg = isset( $values['ibx_notify_cust_msg_msg'] ) ? html_entity_decode( $values['ibx_notify_cust_msg_msg'][0] ) : '';
+     $ibx_notify_sale_msg = isset( $values['ibx_notify_sale_msg'] ) ? ( $values['ibx_notify_sale_msg'][0] ) : '';
      $ibx_notify_sale_name = isset( $values['ibx-notify-sale-name'] ) ? esc_attr( $values['ibx-notify-sale-name'][0] ) : '';
      $ibx_notify_sale_email = isset( $values['ibx-notify-sale-email'] ) ? esc_attr( $values['ibx-notify-sale-email'][0] ) : '';
      $ibx_notify_design_position = isset( $values['ibx-notify-design-position'] ) ? esc_attr( $values['ibx-notify-design-position'][0] ) : '';
@@ -247,7 +245,7 @@
                                     </select>
                                 </td>
                             </tr>
-                            <tr class="email_sec default">
+                            <tr class="email_sec default mailchimp convertkit">
                                     <th scope="row" valign="top">
                                         <label><?php esc_html_e('Message', IBX_NOTIFY); ?></label>
                                     </th>
@@ -316,14 +314,10 @@
                             </tr>
                             <tr class="email_sec custom">
                                     <th scope="row" valign="top">
-                                        <label><?php esc_html_e('Message', IBX_NOTIFY); ?></label>
+                                        <label><?php esc_html_e('Insert HTML form code here', IBX_NOTIFY); ?></label>
                                     </th>
                                     <td>
-                                        <?php
-                                                if( $ibx_notify_email_cust_msg != '' ) { $content = $ibx_notify_email_cust_msg; }else{ $content = '{ Name } just purchased this awesome product'; }
-                                                $editor_id = 'ibx_notify_email_cust_msg';
-                                                wp_editor( $content, $editor_id );
-                                        ?>
+                                        <textarea cols="60" rows="5" name="ibx_notify_email_cust_msg" /> <?php echo $ibx_notify_email_cust_msg; ?></textarea>
                                     </td>
                             </tr>
                             <tr class="email_sec custom">
@@ -350,28 +344,13 @@
                                     ?>
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="row" valign="top">
-                                    <label><?php esc_html_e('Confirmation Message', IBX_NOTIFY); ?></label>
-                                </th>
-                                <td>
-                                    <textarea cols="60" rows="1" name="ibx_notify_cust_msg_conmsg" /> <?php echo $ibx_notify_cust_msg_conmsg; ?></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row" valign="top">
-                                    <label><?php esc_html_e('Placeholder', IBX_NOTIFY); ?></label>
-                                </th>
-                                <td>
-                                    <textarea cols="60" rows="1" name="ibx_notify_cust_msg_place" /> <?php echo $ibx_notify_cust_msg_place; ?></textarea>
-                                </td>
-                            </tr>
                         </table>
         		</div>
                 <div class="ibx_notify_sale side_wraper" id="sale">
                     <table class="form-table sale-table">
                                     <tbody>
                                             <tr>
+                                                <th scope="row" valign="top"></th>
                                                 <td>
                                                     <input type="text" name="ibx-notify-sale-name[]" placeholder="Name">
                                                 </td>
@@ -379,10 +358,10 @@
                                                     <input type="email" name="ibx-notify-sale-email[]" placeholder="Email">
                                                 </td>
                                                 <td>
-                                                    <span class='dashicons dashicons-plus button button-primary' id='add-tr'></span>
+                                                    <span class='dashicons dashicons-plus' id='add-tr'></span>
                                                 </td>
                                                 <td>
-                                                    <span class='dashicons dashicons-plus button button-primary' style="visibility: hidden;"></span>
+                                                    <span class='dashicons dashicons-plus' style="visibility: hidden;"></span>
                                                 </td>
                                             </tr>
                                     </tbody>
@@ -393,11 +372,7 @@
                                 <label><?php esc_html_e('Message', IBX_NOTIFY); ?></label>
                             </th>
                             <td>
-                                <?php
-                                        if( $ibx_notify_sale_msg != '' ) { $content = $ibx_notify_sale_msg; }else{ $content = '{ Name } just purchased this awesome product'; }
-                                        $editor_id = 'ibx_notify_sale_msg';
-                                        wp_editor( $content, $editor_id );
-                                ?>
+                                <textarea cols="60" rows="5" name="ibx_notify_sale_msg"> <?php echo $ibx_notify_sale_msg; ?></textarea>
                             </td>
                         </tr>
                     </table>

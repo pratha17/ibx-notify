@@ -38,22 +38,24 @@
              $ibx_notify_visibility_appear = get_post_meta($coupon->ID, 'ibx-notify-visibility-appear', true);
              $ibx_notify_visibility_appear_hide = get_post_meta($coupon->ID, 'ibx-notify-visibility-appear-hide', true);
          }
-         print_r($ibx_notify_email_def_msg);
         ?>
 
 <?php if ( $ibx_notify_type == 'email' && $ibx_notify_config_active == 1 ) { ?>
 
 
     <?php if ( $ibx_notify_email_type == 'default' ) { ?>
-            <div class="ibx-notify-email-wraper">
-                <div class="ibx-notify-email-container">
+            <div class="ibx-notify-toggel-button">
+                <img src="<?php echo IBX_URL . 'assest\img\min.png'; ?>" alt="" id="hide" style="display:none;">
+                <img src="<?php echo IBX_URL . 'assest\img\plus.png'; ?>" alt="" id="show">
+            </div>
+            <div class="ibx-notify-email-wraper" style="display:none;">
+                <div class="ibx-notify-email-container row">
                         <div class="ibx-notify-email-text">
-                            <img class=" wp-image-503 alignleft" src="http://localhost/wordpress/wp-content/uploads/2017/04/testimonial-300x300.png" alt="" width="99" height="99" />Prashant just purchased this awesome product
-                            <?php esc_html_e( $ibx_notify_email_def_msg, IBX_NOTIFY ); ?>
+                            <?php echo html_entity_decode( $ibx_notify_email_def_msg); ?>
                         </div>
-                        <div class="ibx-notify-email-input">
-                            <input type="email" name="" value="" placeholder="<?php esc_html_e( $ibx_notify_email_def_place, IBX_NOTIFY ); ?>">
-                            <input type="button" name="" value="Send" class="button button-primary">
+                        <div class="input-group">
+                          <input type="email" name="" value="" placeholder="<?php esc_html_e( $ibx_notify_email_def_place, IBX_NOTIFY ); ?>" aria-describedby="basic-addon2">
+                          <span class="input-group-addon btn btn-primary" id="basic-addon2">Send</span>
                         </div>
                 </div>
             </div>
@@ -66,8 +68,43 @@
 
     <?php } ?>
     <?php if ( $ibx_notify_email_type == 'custom' ) { ?>
+            <div class="ibx-notify-email-wraper col-md-3">
+                <div class="ibx-notify-email-container row">
+                        <?php echo  $ibx_notify_email_cust_msg; ?>
 
+                </div>
+            </div>
     <?php } ?>
 
 
 <?php } ?>
+
+<style media="screen">
+    <?php if ( $ibx_notify_design_position == 'bottom-right' ){ ?>
+            .ibx-notify-toggel-button{
+               position: fixed;
+               bottom: 13px;
+               left: 10px;
+           }
+            .ibx-notify-email-wraper{
+                position: fixed;
+                bottom: 60px;
+                left: 60px;
+            }
+    <?php }elseif ( $ibx_notify_design_position == 'bottom-left' ){?>
+            .ibx-notify-toggel-button{
+               position: fixed;
+               bottom: 13px;
+               right: 10px;
+               -moz-transform: scaleX(-1);
+               -o-transform: scaleX(-1);
+               -webkit-transform: scaleX(-1);
+               transform: scaleX(-1);
+           }
+            .ibx-notify-email-wraper{
+                position: fixed;
+                bottom: 60px;
+                right: 60px;
+            }
+    <?php } ?>
+</style>

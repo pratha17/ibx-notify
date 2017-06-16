@@ -33,6 +33,7 @@ class IN_Ibx_Notify_Frontend{
 
 public function load_custom_scripts_frontend(){
     wp_enqueue_style( 'custom_plugin_css', IBX_URL .'assest/CSS/frontend.css', array(), null, 'all' );
+    // wp_enqueue_style( 'bootstrap_plugin_css', IBX_URL .'assest/CSS/bootstrap.min', array(), null, 'all' );
     wp_enqueue_script( 'custom_plugin_js', IBX_URL .'assest/JS/frontend.js','','',true );
     wp_enqueue_script( 'wofomo_cookie_js', IBX_URL .'assest/JS/jquery.cookie.js', '' , '' , true );
 

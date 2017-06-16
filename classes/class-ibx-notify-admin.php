@@ -124,7 +124,7 @@ public function display_meta_box_callback(  ) {
            if( isset( $_POST['ibx_notify_type'] ) )
                update_post_meta( $post->ID, 'ibx_notify_type', sanitize_text_field( $_POST['ibx_notify_type'] ) );
            if( isset( $_POST['ibx_notify_notification_bar_description'] ) )
-               update_post_meta( $post->ID, 'ibx_notify_notification_bar_description', sanitize_text_field( $_POST['ibx_notify_notification_bar_description'] ) );
+               update_post_meta( $post->ID, 'ibx_notify_notification_bar_description', sanitize_text_field( htmlentities( $_POST['ibx_notify_notification_bar_description'] ) ) );
            if( isset( $_POST['ibx_notify_enable_countdown'] ) )
                update_post_meta( $post->ID, 'ibx_notify_enable_countdown', sanitize_text_field( $_POST['ibx_notify_enable_countdown'] ) );
            if( isset( $_POST['ibx_notify_notification_bar_countdown_text'] ) )
@@ -144,13 +144,10 @@ public function display_meta_box_callback(  ) {
            if( isset( $_POST['ibx_notify_email_type'] ) )
                update_post_meta( $post->ID, 'ibx_notify_email_type', sanitize_text_field( $_POST['ibx_notify_email_type'] ) );
            if( isset( $_POST['ibx_notify_email_def_msg'] ) )
-               update_post_meta( $post->ID, 'ibx_notify_email_def_msg', sanitize_text_field( $_POST['ibx_notify_email_def_msg'] ) );
+               update_post_meta( $post->ID, 'ibx_notify_email_def_msg', sanitize_text_field( htmlentities( $_POST['ibx_notify_email_def_msg'] ) ) );
            if( isset( $_POST['ibx_notify_email_def_place'] ) )
                update_post_meta( $post->ID, 'ibx_notify_email_def_place', sanitize_text_field( $_POST['ibx_notify_email_def_place'] ) );
-print_r( $_POST['ibx_notify_email_def_msg'] );
-exit;
-           if( isset( $_POST['ibx_notify_email_def_msg'] ) )
-               update_post_meta( $post->ID, 'ibx_notify_email_def_msg', sanitize_text_field( $_POST['ibx_notify_email_def_msg'] ) );
+
            if( isset( $_POST['ibx_notify_email_def_sendmail'] ) )
                update_post_meta( $post->ID, 'ibx_notify_email_def_sendmail', sanitize_text_field( $_POST['ibx_notify_email_def_sendmail'] ) );
            if( isset( $_POST['ibx_notify_email_def_conmsg'] ) )
@@ -164,15 +161,11 @@ exit;
            if( isset( $_POST['ibx_notify_email_mailchimp_conmsg'] ) )
                update_post_meta( $post->ID, 'ibx_notify_email_mailchimp_conmsg', sanitize_text_field( $_POST['ibx_notify_email_mailchimp_conmsg'] ) );
            if( isset( $_POST['ibx_notify_email_cust_msg'] ) )
-               update_post_meta( $post->ID, 'ibx_notify_email_cust_msg', sanitize_text_field( $_POST['ibx_notify_email_cust_msg'] ) );
+               update_post_meta( $post->ID, 'ibx_notify_email_cust_msg', ( $_POST['ibx_notify_email_cust_msg'] ) );
            if( isset( $_POST['ibx_notify_email_cust_conmsg'] ) )
                update_post_meta( $post->ID, 'ibx_notify_email_cust_conmsg', sanitize_text_field( $_POST['ibx_notify_email_cust_conmsg'] ) );
            if( isset( $_POST['ibx_notify_cust_msg_msg'] ) )
-               update_post_meta( $post->ID, 'ibx_notify_cust_msg_msg', sanitize_text_field( $_POST['ibx_notify_cust_msg_msg'] ) );
-           if( isset( $_POST['ibx_notify_cust_msg_conmsg'] ) )
-               update_post_meta( $post->ID, 'ibx_notify_cust_msg_conmsg', sanitize_text_field( $_POST['ibx_notify_cust_msg_conmsg'] ) );
-           if( isset( $_POST['ibx_notify_cust_msg_place'] ) )
-               update_post_meta( $post->ID, 'ibx_notify_cust_msg_place', sanitize_text_field( $_POST['ibx_notify_cust_msg_place'] ) );
+               update_post_meta( $post->ID, 'ibx_notify_cust_msg_msg', sanitize_text_field( htmlentities( $_POST['ibx_notify_cust_msg_msg'] ) ) );
            if( isset( $_POST['ibx_notify_sale_msg'] ) )
                update_post_meta( $post->ID, 'ibx_notify_sale_msg', sanitize_text_field( $_POST['ibx_notify_sale_msg'] ) );
             $name = array_map( 'esc_attr', $_POST['ibx-notify-sale-name'] );

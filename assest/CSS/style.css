@@ -73,23 +73,21 @@
     font-weight: 400;
 }
 
-.ibx_notify_sale .button-primary {
-    background: #7cc048;
-    border-color: #7cc048;
-    -webkit-box-shadow: 0 1px 0 #7cc048;
-    box-shadow: 0 1px 0 #7cc048;
+.ibx_notify_sale .dashicons {
+    background: #0085ba;
     color: #fff;
-    text-decoration: none;
-    text-shadow: 0 -1px 1px #7cc048, 1px 0 1px #7cc048, 0 1px 1px #7cc048, -1px 0 1px #7cc048;
-    padding: 0;width: 30px;
+    border-radius: 20px;
+    font-size: 15px;
+    line-height: 22px;
+    cursor: pointer;
 }
-.ibx_notify_sale .button-primary.del-tr {
-    background: #dc0000;
-    border-color: #dc0000;
-    -webkit-box-shadow: 0 1px 0 #dc0000;
-    box-shadow: 0 1px 0 #dc0000;
-    color: #fff;
-    text-decoration: none;
-    text-shadow: 0 -1px 1px #dc0000, 1px 0 1px #dc0000, 0 1px 1px #dc0000, -1px 0 1px #dc0000;
-    padding: 0;width: 30px;
+.ibx_notify_sale .dashicons.del-tr {
+    background: #ffffff;
+    color: #006799;
+    border: 1px solid #006799;
+    font-weight: 900;
+}
+
+.ibx_notify_container .form-table tr td {
+    padding: 15px 0px!important;
 }

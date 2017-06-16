@@ -58,13 +58,16 @@
                 <div class="ibx-notify-notification-bar-text">
                     <div class="ibx-notify-notification-bar-text-wrap">
                         <div class="ibx-notify-notification-bar-text-content" data-editable="true">
-                            <?php esc_html_e( $ibx_notify_notification_bar_description, IBX_NOTIFY ); ?>
+                            <?php echo html_entity_decode( $ibx_notify_notification_bar_description ); ?>
                         </div>
                     </div>
                 </div>
                 <?php if ( $ibx_notify_enable_notification_email == 1 ){ ?>
+                    <!-- <div class="input-group">
+                      <span class="input-group-addon button button-primary" id="basic-addon2">Send</span>
+                    </div> -->
                     <div class="ibx-notify-notification-bar-email">
-                        <input type="email" name="" value="" placeholder="<?php esc_html_e( $ibx_notify_notification_email, IBX_NOTIFY ); ?>">
+                        <input type="email" name="" value="" placeholder="<?php esc_html_e( $ibx_notify_notification_email, IBX_NOTIFY ); ?>" aria-describedby="basic-addon2">
                         <input type="button" name="" value="Send" class="button button-primary">
                     </div>
                     <?php } ?>

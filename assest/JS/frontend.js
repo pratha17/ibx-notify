@@ -1,3 +1,18 @@
+// EMAIL OPT-IN
+jQuery( window ).load(function() {
+    jQuery('.ibx-notify-toggel-button #show').click(function(){
+        jQuery( this ).animate({ opacity: 0 }, 800).hide();
+        jQuery('.ibx-notify-email-wraper').animate({ opacity: 1 }, 800).show();
+        jQuery('.ibx-notify-toggel-button #hide').animate({ opacity: 1 }, 800).show();
+    });
+    jQuery('.ibx-notify-toggel-button #hide').click(function(){
+        jQuery( this ).animate({ opacity: 0 }, 800).hide();
+        jQuery('.ibx-notify-email-wraper').animate({ opacity: 0 }, 800).hide();
+        jQuery('.ibx-notify-toggel-button #show').animate({ opacity: 1 }, 800).show();
+    });
+});
+
+
 // NOTIFICATION BAR
 jQuery(window).load(function() {
     var height = jQuery('#wpadminbar').outerHeight();
@@ -64,10 +79,6 @@ if ( jQuery.cookie('countDownDate') ){
 });
 
 
-// EMAIL OPT-IN
-jQuery(window).load(function() {
-
-});
 
 // CUSTOM MESSAGE
 jQuery(window).load(function() {

@@ -5,7 +5,7 @@
         background: #fff;
         border-bottom: 1px solid #ddd;
         border-top: 0;
-        position: absolute;
+        position: absolute!important;
         top: 0;
         left: 0;
         width: 100%;
@@ -79,14 +79,20 @@
 /*
  *EMAIL OPT-IN
  */
+
+ .ibx-notify-toggel-button{
+    cursor: pointer;
+}
+ .ibx-notify-toggel-button span{
+     color: blue;
+     font-size: 35px;
+}
  .ibx-notify-email-wraper{
      display: table;
-     position: fixed;
-     bottom: 30px;
-     left: 30px;
      transition: margin-top 0.3s ease;
      width: 350px;
      z-index: 9999;
+     opacity: 0;
  }
  .ibx-notify-email-wraper a{
      text-decoration: none;
@@ -102,8 +108,35 @@
  .ibx-notify-email-text{
      display: table-cell;
      vertical-align: middle;
-     padding: 20px 0;
+     padding: 0 0 20px 0;
  }
  .ibx-notify-email-input{
      display: flex;
  }
+ .ibx-notify-email-input input[type=email]{
+     height: 40px;
+ }
+ .ibx-notify-email-input i {
+     position: absolute;
+     right: 30px;
+     bottom: 24px;
+     font-size: 20px;
+     color: #999;
+     cursor: pointer;
+ }
+ .ibx-notify-email-input button {
+     width: 20%;
+     height: 40px;
+     background-color: #1191cb;
+     color: #fff;
+     border-radius: 0 3px 3px 0;
+     border: 0;
+     float: right;
+     cursor: pointer;
+     padding: 0;
+     margin: 0;
+     font-size: 12px;
+}
+/*
+* SALE NOTIFICATION
+*/

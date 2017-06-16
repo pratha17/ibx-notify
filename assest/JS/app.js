@@ -72,10 +72,11 @@ jQuery(document).ready(function($){
     jQuery(".sale-table").on('click','#add-tr',function(){
         jQuery(".sale-table").append(
             "<tr>"+
+            "<th scope='row' valign='top'></th>"+
             "<td><input type='text' name='ibx-notify-sale-name[]' placeholder='Name'/></td>"+
             "<td><input type='email' name='ibx-notify-sale-email[]' placeholder='Email'/></td>"+
-            "<td><span class='dashicons dashicons-minus del-tr button button-primary'></span></td>"+
-            "<td><span class='dashicons dashicons-plus button button-primary' id='add-tr'></span></td>"+
+            "<td><span class='dashicons dashicons-minus del-tr'></span></td>"+
+            "<td><span class='dashicons dashicons-plus' id='add-tr'></span></td>"+
             "</tr>");
     });
 

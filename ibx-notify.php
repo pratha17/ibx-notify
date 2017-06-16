@@ -21,4 +21,6 @@ require_once IBX_DIR . 'classes/class-ibx-notify-admin.php';
 
 require_once IBX_DIR . 'classes/class-ibx-notify-frontend.php';
 
+require_once IBX_DIR . 'classes/class-ibx-notify-settings.php';
+
 ?>
