@@ -14,8 +14,8 @@
       }
 
     function ibx_notify_settings_enqueue() {
-          wp_enqueue_style( 'custom_plugin_css', IBX_URL .'assest/CSS/style.css', array(), null, 'all' );
-          wp_enqueue_script( 'custom_plugin_js', IBX_URL .'assest/JS/app.js','','',true );
+          wp_enqueue_style( 'custom_plugin_css', IBX_NOTIFY_URL .'assest/CSS/style.css', array(), null, 'all' );
+          wp_enqueue_script( 'custom_plugin_js', IBX_NOTIFY_URL .'assest/JS/app.js','','',true );
       }
 
     function ibx_notify_settings_menu() {
@@ -23,14 +23,14 @@
                             __( 'Settings' ),
                             __( 'Settings' ),
                             'manage_options',
-                            'ibx_notify',
+                            'ibx-notify',
                             array($this,'ibx_notify_settings_page')
                     );
      }
 
      // Building the Options Page
     function ibx_notify_settings_page(){
-        require_once IBX_DIR . 'includes/display_settings_callback.php';
+        require_once IBX_NOTIFY_DIR . 'includes/display_settings_callback.php';
     }
 
      // Register the Settings

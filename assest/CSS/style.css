@@ -8,6 +8,13 @@
     margin: -12px 0 0 0;
     padding: 0;
 }
+.ibx_notify_container{
+    display :none;
+}
+#Config{
+    display : block;
+}
+
 .ibx_notify_tab{
     width: 160px;
     margin: 0;
@@ -72,22 +79,59 @@
     display: block;
     font-weight: 400;
 }
-
-.ibx_notify_sale .dashicons {
-    background: #0085ba;
-    color: #fff;
-    border-radius: 20px;
-    font-size: 15px;
-    line-height: 22px;
-    cursor: pointer;
-}
-.ibx_notify_sale .dashicons.del-tr {
+.ibx_notify_sale .dashicons.del-tr{
     background: #ffffff;
     color: #006799;
     border: 1px solid #006799;
     font-weight: 900;
 }
 
-.ibx_notify_container .form-table tr td {
-    padding: 15px 0px!important;
+/*============= Reviews =================*/
+.ibx_notify_sale_tbody,
+.ibx_notify_reviews_tbody{
+    border: 1px solid #ddd;
+}
+.ibx_notify_sale_tr,
+.ibx_notify_reviews_tr{
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+}
+.ibx_notify_sale_tbody th,
+.ibx_notify_reviews_tbody th{
+    padding: 5px 15px;
+    font-size: 13px;
+    font-weight: 400;
+}
+.ibx_notify_sale_tbody td,
+.ibx_notify_reviews_tbody td{
+    padding: 2px 15px;
+    font-size: 13px;
+}
+.ibx_notify_sale_tr th h3,
+.ibx_notify_reviews_tr th h3{
+    margin: 0px;
+    font-size: 15px;
+}
+.ibx_notify_sale table tr .del-tr ,
+.ibx_notify_reviews table tr .del-tr {
+    float: right;
+}
+.ibx_notify_sale_tbody input[type="button"], .ibx_notify_sale_tbody textarea, .ibx_notify_sale_tbody input[type="text"],
+.ibx_notify_reviews_tbody input[type="button"], .ibx_notify_reviews_tbody select, .ibx_notify_reviews_tbody textarea, .ibx_notify_reviews_tbody input[type="text"]{
+    padding: 0px 5px;
+}
+.ibx_notify_reviews_tbody select{
+    height: 22px;
+}
+.sale-table:first-child .ibx_notify_sale_tbody tr:first-child .del-tr,
+.review-table:first-child .ibx_notify_reviews_tbody tr:first-child .del-tr{
+    visibility: hidden;
+}
+.add-tr{
+    float: right;
+}
+.ibx_notify_sale .button,
+.ibx_notify_reviews .button{
+    height: 22px!important;
+    line-height: 0!important;
 }

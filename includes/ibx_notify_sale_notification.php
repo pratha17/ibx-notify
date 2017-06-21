@@ -1,6 +1,6 @@
 <?php
         $coupons_args = array(
-            'post_type'      => IBX_NOTIFY,
+            'post_type'      => 'ibx_notify',
             'post_status'    => 'publish',
             'paged'          => get_query_var('paged') ? get_query_var('paged') : 1,
         );
@@ -34,6 +34,6 @@
 
 <?php if ( $ibx_notify_type == 'sale' && $ibx_notify_config_active == 1 ) { ?>
 
-        
+
 
 <?php } ?>

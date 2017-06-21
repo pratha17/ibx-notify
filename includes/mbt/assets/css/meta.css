@@ -1,0 +1,89 @@
+.mbt-metabox-tabs-wrapper *,
+.mbt-metabox-tabs-wrapper *:before,
+.mbt-metabox-tabs-wrapper *:after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.mbt-metabox-tabs-wrapper {
+    background: #f9f9f9;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-col-left {
+    width: 120px;
+    float: left;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-col-right {
+    float: left;
+    background: #fff;
+    min-height: 200px;
+    width: calc(100% - 120px);
+    border-left: 1px solid #eee;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-metabox-tabs,
+.mbt-metabox-tabs-wrapper .mbt-metabox-tabs .mbt-metabox-tab {
+    margin: 0;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-metabox-tabs .mbt-metabox-tab.active {
+    margin-right: -1px !important;
+    position: relative;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-metabox-tabs .mbt-metabox-tab a {
+    color: #777;
+    display: block;
+    border-bottom: 1px solid #eee;
+    outline: none;
+    padding: 20px;
+    text-decoration: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+.mbt-metabox-tabs-wrapper .mbt-metabox-tabs .mbt-metabox-tab.active a {
+    background: #fff;
+    color: #000;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-metabox-tabs-content {
+    padding: 0 15px;
+}
+.mbt-metabox-tabs-wrapper .mbt-metabox-tab-content:not(.active) {
+    display: none;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-metabox-section {
+    margin-bottom: 25px;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-metabox-section .mbt-metabox-section-title {
+    padding: 20px 0 !important;
+    margin-bottom: 10px !important;
+    border-bottom: 1px solid #eee;
+    font-weight: bold !important;
+    text-transform: uppercase;
+}
+
+/* Fields */
+.mbt-metabox-tabs-wrapper .mbt-field {
+    font-size: 13px;
+    vertical-align: top;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-field .mbt-field-description {
+    color: #888;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-field .description {
+    font-size: 13px;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-field textarea {
+    min-width: 320px;
+}
+
+.mbt-metabox-tabs-wrapper .mbt-field .wp-color-result {
+    height: 24px;
+}

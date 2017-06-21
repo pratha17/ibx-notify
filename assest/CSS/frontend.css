@@ -83,9 +83,12 @@
  .ibx-notify-toggel-button{
     cursor: pointer;
 }
- .ibx-notify-toggel-button span{
-     color: blue;
-     font-size: 35px;
+.ibx-notify-toggel-button span {
+    color: rgb(0, 0, 0);
+    background: rgb(255, 0, 0);
+    font-size: 35px;
+    width: 35px;
+    height: 32px;
 }
  .ibx-notify-email-wraper{
      display: table;
@@ -110,33 +113,10 @@
      vertical-align: middle;
      padding: 0 0 20px 0;
  }
- .ibx-notify-email-input{
-     display: flex;
+
+ .ibx-notify-email-wraper .input-group input[type=email]{
+     border-radius: 4px 0px 0px 4px;
  }
- .ibx-notify-email-input input[type=email]{
-     height: 40px;
- }
- .ibx-notify-email-input i {
-     position: absolute;
-     right: 30px;
-     bottom: 24px;
-     font-size: 20px;
-     color: #999;
-     cursor: pointer;
- }
- .ibx-notify-email-input button {
-     width: 20%;
-     height: 40px;
-     background-color: #1191cb;
-     color: #fff;
-     border-radius: 0 3px 3px 0;
-     border: 0;
-     float: right;
-     cursor: pointer;
-     padding: 0;
-     margin: 0;
-     font-size: 12px;
-}
 /*
 * SALE NOTIFICATION
 */
