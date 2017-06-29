@@ -1,122 +1,128 @@
 /*
- *NOTIFICATION BAR
- */
-    .ibx-notify-notification-bar-wraper{
-        background: #fff;
-        border-bottom: 1px solid #ddd;
-        border-top: 0;
-        position: absolute!important;
-        top: 0;
-        left: 0;
-        width: 100%;
-        transition: margin-top 0.3s ease;
-        z-index: 9999;
-    }
-    .ibx-notify-notification-bar-container{
-        padding: 0 40px;
-        text-align: center;
-    }
-    .ibx-notify-notification-bar-close{
-        color: #585858;
-        cursor: pointer;
-        display: block;
-        font-size: 28px;
-        font-weight: 100;
-        text-decoration: none!important;
-        vertical-align: text-top;
-        position: absolute;
-        top: 10px;
-        right: 60px;
-    }
-    .ibx-notify-notification-bar-timer{
-        background: red;
-        color: #fff;
-        display: inline-block;
-        min-width: 125px;
-        padding: 10px;
-        vertical-align: middle;
-        text-align: center;
-    }
-    .ibx-notify-notification-bar-timer p , .ibx-notify-notification-bar-coupon p{
-        margin: 0;
-        padding: 0;
-    }
-    .ibx-notify-notification-bar-text{
-        color: #404040;
-        display: inline-block;
-        margin-right: 0px;
-        margin-left: 15px;
-        font-size: 18px;
-        line-height: 1.2em;
-        font-weight: 400;
-        vertical-align: middle;
-        text-align: center;
-    }
-    .ibx-notify-notification-bar-coupon{
-        display: inline-block;
-        vertical-align: middle;
-        background: #fcffa9;
-        color: #333;
-        font-size: 16px;
-        text-decoration: none;
-        padding: 8px 15px;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        border: 1px dashed #aaa;
-    }
-    .ibx-notify-notification-bar-email{
-        display: -webkit-inline-box;
-        margin-right: 0px;
-        margin-left: 15px;
-        font-size: 18px;
-        line-height: 1.2em;
-        font-weight: 400;
-        vertical-align: middle;
-        text-align: right;
-    }
+*NOTIFICATION BAR
+*/
+.ibx-notify-notification-bar-wraper{
+    border-bottom:  1px solid #ddd;
+    border-top:     0;
+    margin-top:     -100px;
+    transition:     margin-top 0.3s ease;
+    width:          100%;
+    z-index:        9999;
+}
+.ibx-notify-notification-bar-wraper .container{
+    padding:        0 40px;
+    text-align:     center;
+}
+.ibx-notify-notification-bar-wraper .close{
+    color:          #585858;
+    cursor:         pointer;
+    font-size:      28px;
+    font-weight:    100;
+    position:       absolute;
+    top:            18px;
+    right:          10px;
+    text-decoration:none!important;
+    vertical-align: middle;
+}
+.ibx-notify-notification-bar-wraper .timer{
+    display:        inline-block;
+    min-width:      125px;
+    padding:        10px;
+    text-align:     center;
+    vertical-align: middle;
+}
+.ibx-notify-notification-bar-wraper .timer p{
+    margin:         0;
+    padding:        0;
+}
+.ibx-notify-notification-bar-wraper .timer p b{
+    font-size:      17px;
+    padding:        0 4px;
+}
+.ibx-notify-notification-bar-wraper .text{
+    color:          #404040;
+    display:        inline-block;
+    margin-right:   0px;
+    margin-left:    15px;
+    text-align:     center;
+    vertical-align: middle;
+}
+.ibx-notify-notification-bar-wraper .text p{
+    margin:         0;
+}
 
 /*
- *EMAIL OPT-IN
- */
+*Custom Message
+*/
 
- .ibx-notify-toggel-button{
-    cursor: pointer;
+.ibx-notify-toggel-button{
+    cursor:         pointer;
+}
+.ibx-notify-toggel-button #hide{
+    display:        none;
 }
 .ibx-notify-toggel-button span {
-    color: rgb(0, 0, 0);
-    background: rgb(255, 0, 0);
-    font-size: 35px;
-    width: 35px;
-    height: 32px;
+    background:     rgb(255, 0, 0);
+    color:          rgb(0, 0, 0);
+    font-size:      35px;
+    height:         32px;
+    width:          35px;
 }
- .ibx-notify-email-wraper{
-     display: table;
-     transition: margin-top 0.3s ease;
-     width: 350px;
-     z-index: 9999;
-     opacity: 0;
- }
- .ibx-notify-email-wraper a{
-     text-decoration: none;
- }
- .ibx-notify-email-container{
-     background: #fff;
-     border: 1px solid #ddd;
-     border-top: 0;
-     border-radius: 15px;
-     padding: 20px;
-     text-align: center;
- }
- .ibx-notify-email-text{
-     display: table-cell;
-     vertical-align: middle;
-     padding: 0 0 20px 0;
- }
-
- .ibx-notify-email-wraper .input-group input[type=email]{
-     border-radius: 4px 0px 0px 4px;
- }
+.ibx-notify-wraper,
+.ibx-notify-popup-wraper{
+    width:              300px;
+    transition:         margin-top 0.3s ease;
+    z-index:            9999;
+}
+.ibx-notify-popup-wraper a,
+.ibx-notify-wraper a{
+    text-decoration:none;
+}
+.ibx-notify-container{
+    -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, .4);
+    -moz-box-shadow:    0 0 4px 0 rgba(0, 0, 0, .4);
+    box-shadow:         0 0 4px 0 rgba(0, 0, 0, .4);
+    border-radius:      10px;
+    padding:            15px;
+    text-align:         center;
+}
+.ibx-notify-text{
+    display:        table;
+    vertical-align: middle;
+}
 /*
-* SALE NOTIFICATION
+* Popup NOTIFICATION
 */
+.ibx-notify-popup-wraper a{
+    cursor:         context-menu;
+    text-decoration:none!important;
+}
+.ibx-notify-popup-wraper .ibx-notify-img{
+    display:        table-cell;
+    height:         50px;
+    width:          50px;
+    vertical-align: top;
+}
+.ibx-notify-popup-wraper .ibx-notify-img img{
+    border-radius:  10px;
+    height:         100%;
+    width:          100%;
+}
+.ibx-notify-popup-wraper .ibx-notify-text-wraper{
+    display:        table-cell;
+    padding-left:   15px;
+    text-align:     left;
+    vertical-align: top;
+}
+.ibx-notify-popup-wraper .ibx-notify-text-content{
+    line-height:    1;
+    margin:         0;
+}
+.ibx-notify-rating{
+    unicode-bidi:   bidi-override;
+    direction:      rtl;
+}
+.ibx-notify-popup-wraper .ibx-notify-container span:before{
+    content:        "\2605";
+    position:       absolute;
+}

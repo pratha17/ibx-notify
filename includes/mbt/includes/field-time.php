@@ -10,18 +10,16 @@
     if ( isset( $field['required'] ) && $field['required'] ) {
         $class .= ' mbt-required-field';
     }
-?>
 
-<?php
+    if ( is_object( $value ) ) {
+		$value = (array) $value;
+	}
+
 	$prepend    = array('00', '01','02','03','04','05','06','07','08','09');
     $days       = array_merge( $prepend, range( 10, 31 ) );
 	$hours      = array_merge( $prepend, range( 10, 23 ) );
 	$minutes    = array_merge( $prepend, range( 10, 59 ) );
 	$seconds    = array_merge( $prepend, range( 10, 59 ) );
-
-	if ( is_object( $value ) ) {
-		$value = (array) $value;
-	}
 ?>
 <select name="<?php echo $id . '[days]'; ?>" class="mbt-time-field-days <?php echo $class; ?>" title="<?php _e('Days', 'mbt'); ?>" style="width: 65px;">
     <option value=""><?php _e('Days', 'mbt'); ?></option>

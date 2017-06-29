@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Plugin Name: MetaBox Tabs
+ * Plugin URI:
+ * Description: MetaBox Tabs
+ * Version: 1.0
+ * Author: Achal Jain
+ * Author URI:
+ * Copyright: (c) 2016 Achal Jain
+ * License: GNU General Public License v2.0
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: cf-blocks
+ */
+
 class MetaBox_Tabs {
 
     const VERSION = '1.0';
@@ -21,6 +34,8 @@ class MetaBox_Tabs {
     static private $args = array();
 
     static private $object_types = array();
+
+    static private $fields_prefix = '';
 
     /**
 	 * Default values of metabox.
@@ -102,7 +117,7 @@ class MetaBox_Tabs {
     {
         global $post_type;
 
-        $object_types = (array)self::$args['object_types'];
+        $object_types = self::$object_types;
 
         if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
             if ( in_array( $post_type, $object_types ) ) {
@@ -128,7 +143,7 @@ class MetaBox_Tabs {
 
         $metabox_id     = self::$args['id'];
         $show_header    = self::$args['show_header'];
-        $object_types   = (array)self::$args['object_types'];
+        $object_types   = self::$object_types;
         ?>
 
         <?php if ( in_array( $post_type, $object_types ) ) { ?>
@@ -147,6 +162,17 @@ class MetaBox_Tabs {
         <?php }
     }
 
+    static public function get_layout()
+    {
+        $layout = 'horizontal';
+
+        if ( isset( self::$args['layout'] ) && 'vertical' == self::$args['layout'] ) {
+            $layout = 'vertical';
+        }
+
+        return $layout;
+    }
+
     /**
 	 * Triggers a hook to register metabox.
 	 *
@@ -155,7 +181,9 @@ class MetaBox_Tabs {
 	 */
     static public function add_meta_box( $args )
     {
-        self::$args = wp_parse_args( $args, self::$defaults );
+        self::$args             = wp_parse_args( $args, self::$defaults );
+        self::$object_types     = (array)self::$args['object_types'];
+        self::$fields_prefix    = isset( self::$args['fields_prefix'] ) ? self::$args['fields_prefix'] : '';
 
         add_action( 'add_meta_boxes', __CLASS__ . '::add_meta_boxes' );
     }
@@ -168,7 +196,7 @@ class MetaBox_Tabs {
 	 */
     static public function add_meta_boxes()
     {
-        add_meta_box( self::$args['id'], self::$args['title'], __CLASS__ . '::render_metabox', self::$args['object_types'], self::$args['context'], self::$args['priority'] );
+        add_meta_box( self::$args['id'], self::$args['title'], __CLASS__ . '::render_metabox', self::$object_types, self::$args['context'], self::$args['priority'] );
     }
 
     /**
@@ -182,8 +210,9 @@ class MetaBox_Tabs {
         self::$post_id = $post->ID;
 
         $tabs       = self::$args['config'];
-        $prefix     = self::$args['fields_prefix'];
+        $prefix     = self::$fields_prefix;
         $metabox_id = self::$args['id'];
+        $layout     = self::get_layout();
 
         wp_nonce_field( self::$args['id'], self::$args['id'] . '_nonce' );
 
@@ -196,21 +225,23 @@ class MetaBox_Tabs {
 	 * @since 1.0
 	 * @return void
 	 */
-    static public function render_metabox_field( $name, $field )
+    static public function render_metabox_field( $name, $field, $value = '' )
     {
         if ( ! isset( $field['type'] ) || empty( $field['type'] ) ) {
             return;
         }
 
         $post_id    = self::$post_id;
-        $prefix     = isset( self::$args['fields_prefix'] ) ? self::$args['fields_prefix'] : '';
+        $prefix     = self::$fields_prefix;
         $id         = $prefix . $name;
         $default    = isset( $field['default'] ) ? $field['default'] : '';
 
-        if ( metadata_exists( 'post', $post_id, $id ) ) {
-            $value  = get_post_meta( $post_id, $id, true );
-        } else {
-            $value  = $default;
+        if ( empty( $value ) ) {
+            if ( metadata_exists( 'post', $post_id, $id ) ) {
+                $value  = get_post_meta( $post_id, $id, true );
+            } else {
+                $value  = $default;
+            }
         }
 
         echo '<tr id="mbt-field-' . $name . '" class="mbt-field" data-type="' . $field['type'] . '">';
@@ -245,6 +276,40 @@ class MetaBox_Tabs {
 	}
 
     /**
+	 * Get metabox fields value.
+	 *
+	 * @since 1.0
+	 * @return object $settings
+	 */
+    static public function get_metabox_settings( $post_id = '' )
+    {
+        $fields     = self::get_metabox_fields();
+        $prefix     = self::$fields_prefix;
+        $settings   = new stdClass();
+
+        if ( empty( $post_id ) ) {
+            global $post;
+            $post_id = $post->ID;
+        }
+
+        foreach ( $fields as $name => $field ) {
+
+            $field_id   = $prefix . $name;
+            $default    = isset( $field['default'] ) ? $field['default'] : '';
+
+            if ( metadata_exists( 'post', $post_id, $field_id ) ) {
+                $value  = get_post_meta( $post_id, $field_id, true );
+            } else {
+                $value  = $default;
+            }
+
+            $settings->{$name} = $value;
+        }
+
+        return $settings;
+    }
+
+    /**
 	 * Save metabox fields.
 	 *
 	 * @since 1.0
@@ -252,8 +317,9 @@ class MetaBox_Tabs {
 	 */
     static public function save_metabox( $post_id )
     {
-        $metabox_id = self::$args['id'];
-        $object_types = (array)self::$args['object_types'];
+        $metabox_id     = self::$args['id'];
+        $object_types   = self::$object_types;
+        $prefix         = self::$fields_prefix;
 
         // Verify the nonce.
         if ( ! isset( $_POST[$metabox_id . '_nonce'] ) || ! wp_verify_nonce( $_POST[$metabox_id . '_nonce'], $metabox_id ) ) {
@@ -276,7 +342,7 @@ class MetaBox_Tabs {
 
         foreach ( $fields as $name => $field ) {
 
-            $field_id = self::$args['fields_prefix'] . $name;
+            $field_id = $prefix . $name;
 
             if ( isset( $_POST[$field_id] ) ) {
                 if ( isset( $field['sanitize_custom'] ) && ! empty( $field['sanitize_custom'] ) ) {

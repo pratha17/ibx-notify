@@ -1,5 +1,5 @@
-<div class="mbt-metabox-tabs-wrapper wp-clearfix" data-mbt-id="<?php echo $metabox_id; ?>">
-    <div class="mbt-col-left">
+<div class="mbt-metabox-tabs-wrapper mbt-layout-<?php echo $layout; ?> wp-clearfix" data-mbt-id="<?php echo $metabox_id; ?>">
+    <div class="<?php echo ( 'vertical' == $layout ) ? 'mbt-row' : 'mbt-col-left'; ?>">
         <div class="mbt-metabox-tabs-wrap">
             <ul class="mbt-metabox-tabs" data-container=".mbt-metabox-tabs-content">
                 <?php $i = 0; foreach ( $tabs as $id => $tab ) : ?>
@@ -15,7 +15,7 @@
             </ul>
         </div>
     </div>
-    <div class="mbt-col-right">
+    <div class="<?php echo ( 'vertical' == $layout ) ? 'mbt-row' : 'mbt-col-right'; ?>">
         <div class="mbt-metabox-tabs-content">
             <?php $i = 0; foreach ( $tabs as $id => $tab ) : // Tabs ?>
                 <div id="mbt-metabox-tab-<?php echo $id; ?>" class="mbt-metabox-tab-content<?php echo ( 0 == $i ) ? ' active' : ''; ?>">

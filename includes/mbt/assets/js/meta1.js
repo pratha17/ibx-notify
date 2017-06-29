@@ -7,13 +7,6 @@
 	 * @class MBT
 	 */
     MBT = {
-        /**
-		 * Initialize the metabox interface.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _init
-		 */
         _init: function()
         {
             MBT._initTabs();
@@ -21,13 +14,6 @@
             MBT._initFields();
         },
 
-        /**
-		 * Initialize metabox tabs.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _initTabs
-		 */
         _initTabs: function()
         {
             // Tabs.
@@ -93,13 +79,6 @@
             });
         },
 
-        /**
-		 * Initialize metabox fields.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _initFields
-		 */
         _initFields: function()
         {
             $('.mbt-metabox-tabs-wrapper .mbt-input-field').trigger('change');
@@ -109,13 +88,6 @@
             MBT._initGroupField();
         },
 
-        /**
-		 * Initialize color field.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _initColorField
-		 */
         _initColorField: function()
         {
             if ( 'undefined' !== typeof $.fn.wpColorPicker ) {
@@ -127,27 +99,88 @@
             }
         },
 
-        /**
-		 * Initialize photo field.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _initPhotoField
-		 */
         _initPhotoField: function()
         {
             if ( $('.mbt-field[data-type="photo"]').length === 0 ) {
                 return;
             }
+
+            var frame,
+                field           = $('.mbt-field[data-type="photo"]'),
+                uploadButton    = field.find('a.mbt-upload-img'),
+                removeButton    = field.find('a.mbt-delete-img'),
+                imgContainer    = field.find('.mbt-img-container'),
+                imgIdField      = field.find('.mbt-img-id');
+                imgUrlField     = field.find('.mbt-img-url');
+
+            // Upload image.
+            uploadButton.on('click', function(e) {
+
+                e.preventDefault();
+
+                // If the media frame already exists, reopen it.
+                if ( frame ) {
+                    frame.open();
+                    return;
+                }
+
+                // Create a new media frame
+                frame = wp.media({
+                    title: 'Upload Photo',
+                    button: {
+                        text: 'Use this photo'
+                    },
+                    multiple: false  // Set to true to allow multiple files to be selected
+                });
+
+                // When an image is selected in the media frame...
+                frame.on( 'select', function() {
+
+                    // Get media attachment details from the frame state
+                    var attachment = frame.state().get('selection').first().toJSON();
+
+                    // Send the attachment URL to our custom image input field.
+                    imgContainer.addClass('mbt-has-img').append( '<img src="'+attachment.url+'" alt="" style="max-width:100%;"/>' );
+
+                    // Send the attachment id to our hidden input
+                    imgIdField.val( attachment.id );
+
+                    // Send the attachment url to our url input
+                    imgUrlField.val( attachment.url );
+
+                    // Hide the upload button
+                    uploadButton.addClass( 'hidden' );
+
+                    // Show the remove button
+                    removeButton.removeClass( 'hidden' );
+                });
+
+                // Finally, open the modal on click
+                frame.open();
+            });
+
+            // Remove image.
+            removeButton.on('click', function(e) {
+
+                e.preventDefault();
+
+                imgContainer.html('').removeClass( 'mbt-has-img' );
+
+                // Show the upload button
+                uploadButton.removeClass( 'hidden' );
+
+                // Hide the remove button
+                removeButton.addClass( 'hidden' );
+
+                // Delete the image id from the hidden input
+                imgIdField.val( '' );
+
+                // Delete the image url from the url input
+                imgUrlField.val( '' );
+            });
+
         },
 
-        /**
-		 * Initialize group field.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _initGroupField
-		 */
         _initGroupField: function()
         {
             if ( $('.mbt-field[data-type="group"]').length === 0 ) {
@@ -159,19 +192,8 @@
             field.each(function() {
 
                 var $this       = $(this),
-                    groups      = $this.find('.mbt-fields-group'),
                     firstGroup  = $this.find('.mbt-fields-group:first'),
                     lastGroup   = $this.find('.mbt-fields-group:last');
-
-                groups.each(function() {
-                    var groupContent = $(this).find('.mbt-fields-group-title:not(.open)').next();
-                    if ( groupContent.is(':visible') ) {
-                        groupContent.slideToggle(0);
-                    }
-                });
-
-                // Reset group ids.
-                MBT._resetGroupFieldIds(groups);
 
                 firstGroup.find('.mbt-fields-group-order .mbt-fields-group-up').addClass('disabled');
                 lastGroup.find('.mbt-fields-group-order .mbt-fields-group-down').addClass('disabled');
@@ -182,6 +204,7 @@
 
                     var fieldId     = $this.attr('id'),
                         wrapper     = $this.find('.mbt-fields-group-wrapper'),
+                        groups      = $this.find('.mbt-fields-group'),
                         firstGroup  = $this.find('.mbt-fields-group:first'),
                         lastGroup   = $this.find('.mbt-fields-group:last'),
                         clone       = $($this.find('.mbt-fields-group-template').html()),
@@ -195,32 +218,13 @@
                     clone.attr('data-group-id', nextGroupId);
                     clone.find('.mbt-fields-group-title').html(title + ' ' + nextGroupId);
 
-                    clone.find('tr.mbt-field[id*='+fieldId+']').each(function() {
-                        var fieldName       = $(this).attr('id').split('[1]')[0].split('mbt-field-')[1];
-                        var fieldNameSuffix = $(this).attr('id').split('[1]')[1];
-                        var nextFieldId     = fieldId + '[' + nextGroupId + ']' + fieldNameSuffix;
-                        var label           = $(this).find('th label');
-
-                        $(this).find('[name*="'+fieldName+'[1]"]').each(function() {
-                            var inputName       = $(this).attr('name').split('[1]');
-                            var inputNamePrefix = inputName[0];
-                            var inputNameSuffix = inputName[1];
-                            var newInputName    = inputNamePrefix + '[' + nextGroupId + ']' + inputNameSuffix;
-                            $(this).attr('id', newInputName).attr('name', newInputName);
-                            label.attr('for', newInputName);
-                        });
-
-                        $(this).attr('id', nextFieldId);
-                    });
-
                     clone.find('.mbt-fields-group-remove').attr('data-remove-group', nextGroupId);
 
                     clone.find('.mbt-fields-group-order .mbt-fields-group-down').addClass('disabled');
 
                     clone.insertBefore($(this).parent());
 
-                    // Reset group ids.
-                    MBT._resetGroupFieldIds($this.find('.mbt-fields-group'));
+                    MBT._restGroupFieldIds(groups);
 
                     $this.find('.mbt-fields-group-footer').show();
 
@@ -230,25 +234,10 @@
 
         },
 
-        /**
-		 * Bind events.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _bindEvents
-		 */
         _bindEvents: function()
         {
             $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-input-field', 'change', function() {
                 MBT._fieldChange(this);
-            } );
-            $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-field[data-type="photo"] a.mbt-upload-img', 'click', function(e) {
-                e.preventDefault();
-                MBT._imageUploadTrigger(this);
-            } );
-            $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-field[data-type="photo"] a.mbt-delete-img', 'click', function(e) {
-                e.preventDefault();
-                MBT._imageRemoveTrigger(this);
             } );
             $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-fields-group .mbt-fields-group-title', 'click', function() {
                 MBT._groupFieldToggle(this);
@@ -335,89 +324,6 @@
         },
 
         /**
-		 * Triggers WP media frame.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _imageUploadTrigger
-         * @param {Object} button
-		 */
-        _imageUploadTrigger: function(button)
-        {
-            var uploadButton    = $(button),
-                wrapper         = uploadButton.parents('.mbt-photo-field-wrapper'),
-                removeButton    = wrapper.find('a.mbt-delete-img'),
-                imgContainer    = wrapper.find('.mbt-img-container'),
-                imgIdField      = wrapper.find('.mbt-img-id'),
-                imgUrlField     = wrapper.find('.mbt-img-url');
-
-            // Create a new media frame
-            var frame = wp.media({
-                title: 'Upload Photo',
-                button: {
-                    text: 'Use this photo'
-                },
-                multiple: false  // Set to true to allow multiple files to be selected
-            });
-
-            // When an image is selected in the media frame...
-            frame.on( 'select', function() {
-
-                // Get media attachment details from the frame state
-                var attachment = frame.state().get('selection').first().toJSON();
-
-                // Send the attachment URL to our custom image input field.
-                imgContainer.addClass('mbt-has-img').append( '<img src="'+attachment.url+'" alt="" style="max-width:100%;"/>' );
-
-                // Send the attachment id to our hidden input
-                imgIdField.val( attachment.id );
-
-                // Send the attachment url to our url input
-                imgUrlField.val( attachment.url );
-
-                // Hide the upload button
-                uploadButton.addClass( 'hidden' );
-
-                // Show the remove button
-                removeButton.removeClass( 'hidden' );
-            });
-
-            // Finally, open the modal on click
-            frame.open();
-        },
-
-        /**
-		 * Remove image clicking on 'remove' button in photo field.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _imageRemoveTrigger
-		 */
-        _imageRemoveTrigger: function(button)
-        {
-            var removeButton    = $(button),
-                wrapper         = removeButton.parents('.mbt-photo-field-wrapper'),
-                uploadButton    = wrapper.find('a.mbt-upload-img'),
-                imgContainer    = wrapper.find('.mbt-img-container'),
-                imgIdField      = wrapper.find('.mbt-img-id'),
-                imgUrlField     = wrapper.find('.mbt-img-url');
-
-            imgContainer.html('').removeClass( 'mbt-has-img' );
-
-            // Show the upload button
-            uploadButton.removeClass( 'hidden' );
-
-            // Hide the remove button
-            removeButton.addClass( 'hidden' );
-
-            // Delete the image id from the hidden input
-            imgIdField.val( '' );
-
-            // Delete the image url from the url input
-            imgUrlField.val( '' );
-        },
-
-        /**
 		 * Toggle group field content.
 		 *
 		 * @since 1.0
@@ -439,39 +345,21 @@
             });
         },
 
-        /**
-		 * Remove group.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _groupFieldRemove
-		 */
         _groupFieldRemove: function(button)
         {
             var groupId = $(button).data('remove-group'),
                 group   = $(button).parents('.mbt-fields-group[data-group-id="'+groupId+'"]'),
                 parent  = group.parent();
 
-            group.fadeOut({
-                duration: 300,
-                complete: function() {
-                    $(this).remove();
-                    if ( parent.find('.mbt-fields-group').length === 1 ) {
-                        parent.find('.mbt-fields-group .mbt-fields-group-footer').hide();
-                    }
-                    parent.find('.mbt-fields-group:first').find('.mbt-fields-group-up').addClass('disabled');
-                    MBT._resetGroupFieldIds(parent.find('.mbt-fields-group'));
-                }
-            });
+            group.remove();
+
+            if ( parent.find('.mbt-fields-group').length === 1 ) {
+                parent.find('.mbt-fields-group .mbt-fields-group-footer').hide();
+            }
+
+            parent.find('.mbt-fields-group:first').find('.mbt-fields-group-up').addClass('disabled');
         },
 
-        /**
-		 * Shift group up.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _groupFieldMoveUp
-		 */
         _groupFieldMoveUp: function(button)
         {
             var currentGroup    = $(button).parents('.mbt-fields-group'),
@@ -481,16 +369,8 @@
             currentGroup.insertBefore(previousGroup);
 
             MBT._resetGroupFieldButtons(parent);
-            MBT._resetGroupFieldIds(parent.find('.mbt-fields-group'));
         },
 
-        /**
-		 * Shift group down.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _groupFieldMoveDown
-		 */
         _groupFieldMoveDown: function(button)
         {
             var currentGroup    = $(button).parents('.mbt-fields-group'),
@@ -500,16 +380,8 @@
             currentGroup.insertAfter(nextGroup);
 
             MBT._resetGroupFieldButtons(parent);
-            MBT._resetGroupFieldIds(parent.find('.mbt-fields-group'));
         },
 
-        /**
-		 * Reset shift buttons.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _resetGroupFieldButtons
-		 */
         _resetGroupFieldButtons: function(groupsParent)
         {
             groupsParent.find('.mbt-fields-group .mbt-fields-group-order a').removeClass('disabled');
@@ -519,73 +391,44 @@
             groupsParent.find('.mbt-fields-group:last').find('.mbt-fields-group-down').addClass('disabled');
         },
 
-        /**
-		 * Reset all occurance of group ids.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _resetGroupFieldIds
-		 */
-        _resetGroupFieldIds: function(groups)
+        _restGroupFieldIds: function(groups)
         {
-            var groupId     = 1,
-                nextGroupId = groups.length + 1;
+            var groupId     = 1;
+            var nextGroupId = groups.length + 1;
 
             groups.each(function() {
-                var group       = $(this),
-                    title       = group.data('group-title'),
-                    fieldName   = group.data('field-name'),
-                    fieldId     = 'mbt-field-' + fieldName,
-                    groupInfo   = group.find('.mbt-fields-group-info').data('info'),
-                    subFields   = groupInfo.group_sub_fields;
+                var group       = $(this);
+                var fieldName   = group.data('field-name');
+                var fieldId     = 'mbt-field-' + fieldName;
+                var groupInfo   = group.find('.mbt-fields-group-info').data('info');
+                var subFields   = groupInfo.group_sub_fields;
 
-                // Update group id.
-                group.attr('data-group-id', groupId);
-                // Update group title.
-                group.find('.mbt-fields-group-title').html(title + ' ' + groupId);
-                // Update group id in remove button.
-                group.find('.mbt-fields-group-remove').attr('data-remove-group', groupId);
+                subFields.forEach(function(obj) { console.log(obj);
+                    group.find('tr.mbt-field[id="'+obj.field_name+'"]').attr('id', fieldId + '[' + groupId + '][' + obj.original_name + ']');
+                });
 
-                // Update sub fields.
-                subFields.forEach(function(obj) {
+                $(this).find('tr.mbt-field[id*='+fieldId+']').each(function() {
 
-                    // Get sub fields row.
-                    var row = group.find('tr.mbt-field[id="mbt-field-' + obj.field_name + '"]');
+                    var fieldNameSuffix = $(this).attr('id').split('[1]')[1];
+                    var nextFieldId     = fieldId + '[' + nextGroupId + ']' + fieldNameSuffix;
+                    var label           = $(this).find('th label');
 
-                    row.find('[name*="'+obj.field_name+'"]').each(function() {
-                        var name    = $(this).attr('name'),
-                            prefix  = name.split(obj.field_name)[0],
-                            suffix  = '';
-
-                        if ( undefined === prefix ) {
-                            prefix = '';
-                        }
-                        if ( 'photo' === row.data('type') ) {
-                            if ( $(this).hasClass('mbt-img-url') ) {
-                                suffix = '[url]';
-                            }
-                            if (  $(this).hasClass('mbt-img-id') ) {
-                                suffix = '[id]';
-                            }
-                        }
-                        name = name.replace( name, prefix + fieldName + '[' + groupId + '][' + obj.original_name + ']' + suffix );
-                        $(this).attr('name', name).attr('id', name);
+                    $(this).find('[name*="'+fieldName+'[1]"]').each(function() {
+                        var inputName       = $(this).attr('name').split('[1]');
+                        var inputNamePrefix = inputName[0];
+                        var inputNameSuffix = inputName[1];
+                        var newInputName    = inputNamePrefix + '[' + nextGroupId + ']' + inputNameSuffix;
+                        $(this).attr('id', newInputName).attr('name', newInputName);
+                        label.attr('for', newInputName);
                     });
 
-                    group.find('tr.mbt-field[id="mbt-field-' + obj.field_name + '"]').attr('id', fieldId + '[' + groupId + '][' + obj.original_name + ']');
+                    $(this).attr('id', nextFieldId);
                 });
 
                 groupId++;
             });
         },
 
-        /**
-		 * Ajax actions when post type dropdown changes.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _updatePostTypeField
-		 */
         _updatePostTypeField: function(post_type, field)
         {
             var selected_taxonomy = field.data('value');
@@ -608,7 +451,6 @@
     };
 
     $(document).ready(function() {
-        // Initialize MBT.
         MBT._init();
     });
 })(jQuery);
