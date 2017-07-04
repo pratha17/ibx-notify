@@ -19,6 +19,7 @@ if( !class_exists( 'Ibx_Notify_Admin' ) ) {
         public function __construct() {
             $this->display_meta_box_callback();
             add_action( 'init', array( $this, 'ibx_notify_admin' ) );
+            add_action( 'admin_enqueue_scripts',array( $this, 'load_custom_scripts_admin' ) );
         }
 
         /**
@@ -62,35 +63,42 @@ if( !class_exists( 'Ibx_Notify_Admin' ) ) {
                 'rewrite'             => '',
                 'capability_type'     => 'post',
                 'supports'            => array( 'title' ),
-                /*            'register_meta_box_cb' => array( $this, 'custom_meta_boxes' ) */
             );
             register_post_type( 'ibx_notify', $args );
         }
-
-        /**
-        * Add Meta Box
-        *
-        * @since     0.1
-        */
-        public function custom_meta_boxes() {
-            add_meta_box(
-                'display_meta_box',
-                __( 'Display', 'ibx_notify' ),
-                array( $this, 'display_meta_box_callback' ),
-                'ibx_notify',
-                'normal',
-                'high'
-            );
-        }
-        /**
-        * Display appearance meta box
-        *
-        * @since     0.1
-        */
-        public function display_meta_box_callback(  ) {
-            require_once IBX_NOTIFY_DIR . 'includes/mbt/metabox-tabs.php';
-            require_once IBX_NOTIFY_DIR . 'includes/metabox.php';
-        }
+/**
+ * Enqueue Scripts
+ *
+ * @since 1.0.0
+ * @return void
+ */
+    public function load_custom_scripts_admin(){
+          wp_enqueue_script( 'custom_plugin_js', IBX_NOTIFY_URL .'assest/JS/app.js','','',true );
+    }
+/**
+* Add Meta Box
+*
+* @since     0.1
+*/
+public function custom_meta_boxes() {
+    add_meta_box(
+        'display_meta_box',
+        __( 'Display', 'ibx_notify' ),
+        array( $this, 'display_meta_box_callback' ),
+        'ibx_notify',
+        'normal',
+        'high'
+    );
+}
+/**
+* Display appearance meta box
+*
+* @since     0.1
+*/
+public function display_meta_box_callback(  ) {
+    require_once IBX_NOTIFY_DIR . 'includes/mbt/metabox-tabs.php';
+    require_once IBX_NOTIFY_DIR . 'includes/metabox.php';
+}
     }
 
     $Ibx_Notify_Admin = new Ibx_Notify_Admin();

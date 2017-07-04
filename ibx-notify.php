@@ -19,7 +19,5 @@ define( 'IBX_NOTIFY_PATH', plugin_basename( __FILE__ ) );
 require_once IBX_NOTIFY_DIR . 'classes/class-ibx-notify-admin.php';
 
 require_once IBX_NOTIFY_DIR . 'classes/class-ibx-notify-frontend.php';
-//
-require_once IBX_NOTIFY_DIR . 'classes/class-ibx-notify-settings.php';
 
 ?>

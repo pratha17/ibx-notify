@@ -28,16 +28,16 @@ MetaBox_Tabs::add_meta_box( array(
                             'toggle'  => array(
                                 'not_bar'   => array(
                                     'sections'  => array('countdown'),
-                                    'fields'    => array('not_description', 'sticky','countdown_text_color', 'countdown_background_color', 'show_delay', 'hide'),
+                                    'fields'    => array('not_description', 'sticky','text_color', 'background_color', 'countdown_text_color', 'countdown_background_color', 'show_delay', 'hide'),
                                 ),
                                 'msg' => array(
-                                    'fields'    => array('msg_section')
+                                    'fields'    => array('msg_section', 'position', 'text_color', 'background_color', 'show_delay')
                                 ),
                                 'purchase' => array(
-                                    'fields'    => array('purchase_group', 'clickable', 'name_color', 'show_delay', 'hide')
+                                    'fields'    => array('purchase_group', 'clickable', 'show_delay', 'hide', 'position', 'name_color', 'text_color', 'background_color')
                                 ),
                                 'reviews' => array(
-                                    'fields'    => array('reviews_group', 'clickable', 'star_color', 'show_delay', 'hide')
+                                    'fields'    => array('reviews_group', 'clickable', 'show_delay', 'hide', 'position', 'text_color', 'background_color', 'star_color')
                                 ),
                             ),
                         ),
@@ -193,32 +193,32 @@ MetaBox_Tabs::add_meta_box( array(
                         'name_color'    => array(
                             'type'      => 'color',
                             'label'     => __('Name Color', 'ibx-notify'),
-                            'default'   => '000000',
+                            'default'   => '#000000',
                         ),
                         'text_color'    => array(
                             'type'      => 'color',
                             'label'     => __('Text Color', 'ibx-notify'),
-                            'default'   => '000000',
+                            'default'   => '#000000',
                         ),
                         'background_color'  => array(
                             'type'          => 'color',
                             'label'         => __('Background Color', 'ibx-notify'),
-                            'default'       => 'ffffff',
+                            'default'       => '#ffffff',
                         ),
                         'countdown_text_color'    => array(
                             'type'      => 'color',
                             'label'     => __('Countdown Text Color', 'ibx-notify'),
-                            'default'   => '000000',
+                            'default'   => '#000000',
                         ),
                         'countdown_background_color'  => array(
                             'type'          => 'color',
                             'label'         => __('Countdown Background Color', 'ibx-notify'),
-                            'default'       => 'ffffff',
+                            'default'       => '#ffffff',
                         ),
                         'star_color'      => array(
                             'type'          => 'color',
                             'label'         => __('Rating Star Color', 'ibx-notify'),
-                            'default'       => '000000',
+                            'default'       => '#000000',
                         ),
                     ),
                 ),
@@ -248,7 +248,7 @@ MetaBox_Tabs::add_meta_box( array(
                         'page_ids'          => array(
                             'type'              => 'text',
                             'label'             => __('Page Ids', 'ibx-notify'),
-                            'help'              => __('Enter Pages Ids with comma ( , ) Separator.', 'ibx-notify'),
+                            'help'              => __('Enter Pages Ids with comma ( , ) Separator. Example: 2,25,311', 'ibx-notify'),
                         ),
                         'visibility_display'=> array(
                             'type'              => 'select',
@@ -285,12 +285,12 @@ MetaBox_Tabs::add_meta_box( array(
                                 'delay'             => __('Delay of some time', 'ibx-notify'),
                             ),
                             'toggle'        => array(
-                                'never'         => array(
-                                    'fields'        => array('transition_delay')
-                                ),
-                                'click'         => array(
-                                    'fields'        => array('transition_delay')
-                                ),
+                                // 'never'         => array(
+                                //     'fields'        => array('transition_delay')
+                                // ),
+                                // 'click'         => array(
+                                //     'fields'        => array('transition_delay')
+                                // ),
                                 'delay'         => array(
                                     'fields'        => array('hide_delay')
                                 ),
@@ -301,31 +301,31 @@ MetaBox_Tabs::add_meta_box( array(
                             'label'             => __('Disappear after', 'ibx-notify'),
                             'description'       => __('seconds', 'ibx-notify'),
                         ),
-                        'transition_delay'        => array(
-                            'type'              => 'number',
-                            'label'             => __('Transition Delay', 'ibx-notify'),
-                            'description'       => __('seconds', 'ibx-notify'),
-                        ),
-                        'how_often'         => array(
-                            'type'              => 'select',
-                            'label'             => __('How often it should appear to each visitor?', 'ibx-notify'),
-                            'default'           => 'always',
-                            'options'           => array(
-                                'always'            => __('Everytime page load', 'ibx-notify'),
-                                'user_interacts'    => __('Hide after user interacts (clicks link or submits email)', 'ibx-notify'),
-                                'hide_for'          => __('Show, then hide for some days', 'ibx-notify'),
-                            ),
-                            'toggle'        => array(
-                                'hide_for'      => array(
-                                    'fields'    => array('hide_for_days')
-                                ),
-                            ),
-                        ),
-                        'hide_for_days'     => array(
-                            'type'              => 'number',
-                            'label'             => __('Hide for', 'ibx-notify'),
-                            'description'       => __('days', 'ibx-notify'),
-                        ),
+                        // 'transition_delay'        => array(
+                        //     'type'              => 'number',
+                        //     'label'             => __('Transition Delay', 'ibx-notify'),
+                        //     'description'       => __('seconds', 'ibx-notify'),
+                        // ),
+                        // 'how_often'         => array(
+                        //     'type'              => 'select',
+                        //     'label'             => __('How often it should appear to each visitor?', 'ibx-notify'),
+                        //     'default'           => 'always',
+                        //     'options'           => array(
+                        //         'always'            => __('Everytime page load', 'ibx-notify'),
+                        //         'user_interacts'    => __('Hide after user interacts (clicks link or submits email)', 'ibx-notify'),
+                        //         'hide_for'          => __('Show, then hide for some days', 'ibx-notify'),
+                        //     ),
+                        //     'toggle'        => array(
+                        //         'hide_for'      => array(
+                        //             'fields'    => array('hide_for_days')
+                        //         ),
+                        //     ),
+                        // ),
+                        // 'hide_for_days'     => array(
+                        //     'type'              => 'number',
+                        //     'label'             => __('Hide for', 'ibx-notify'),
+                        //     'description'       => __('days', 'ibx-notify'),
+                        // ),
                     ),
                 ),
             ),
