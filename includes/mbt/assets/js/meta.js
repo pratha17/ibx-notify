@@ -139,6 +139,17 @@
             if ( $('.mbt-field[data-type="photo"]').length === 0 ) {
                 return;
             }
+
+            $('.mbt-field[data-type="photo"]').each(function () {
+                var wrapper     = $(this),
+                    urlField    = $(this).find('input.mbt-img-url'),
+                    idField     = $(this).find('input.mbt-img-id');
+                if ( '' !==  urlField.val().trim() && '' === idField.val().trim() ) {
+                    wrapper.find('.mbt-img-container').addClass('mbt-has-img').html('<img src="'+urlField.val()+'" style="max-width:100%;" />');
+                    wrapper.find('.mbt-img-action .mbt-upload-img').addClass('hidden');
+                    wrapper.find('.mbt-img-action .mbt-delete-img').removeClass('hidden');
+                }
+            });
         },
 
         /**
@@ -176,12 +187,17 @@
                 firstGroup.find('.mbt-fields-group-order .mbt-fields-group-up').addClass('disabled');
                 lastGroup.find('.mbt-fields-group-order .mbt-fields-group-down').addClass('disabled');
 
+                if ( groups.length === 1 ) {
+                    groups.find('a.mbt-fields-group-remove').addClass('disabled');
+                }
+
                 $this.find('.mbt-fields-group-action').on('click', '.mbt-fields-group-add', function(e) {
 
                     e.preventDefault();
 
                     var fieldId     = $this.attr('id'),
                         wrapper     = $this.find('.mbt-fields-group-wrapper'),
+                        groups      = $this.find('.mbt-fields-group'),
                         firstGroup  = $this.find('.mbt-fields-group:first'),
                         lastGroup   = $this.find('.mbt-fields-group:last'),
                         clone       = $($this.find('.mbt-fields-group-template').html()),
@@ -189,11 +205,16 @@
                         nextGroupId = groupId + 1,
                         title       = clone.data('group-title');
 
+                    groups.each(function() {
+                        $(this).find('.mbt-fields-group-title').next().slideUp(0);
+                        groups.find('a.mbt-fields-group-remove').removeClass('disabled');
+                    });
+
                     groups.find('.mbt-fields-group-order a').removeClass('disabled');
 
                     // Reset all data of clone object.
                     clone.attr('data-group-id', nextGroupId);
-                    clone.find('.mbt-fields-group-title').html(title + ' ' + nextGroupId);
+                    clone.find('.mbt-fields-group-title .mbt-group-field-title-text').html(title + ' ' + nextGroupId);
 
                     clone.find('tr.mbt-field[id*='+fieldId+']').each(function() {
                         var fieldName       = $(this).attr('id').split('[1]')[0].split('mbt-field-')[1];
@@ -215,14 +236,19 @@
 
                     clone.find('.mbt-fields-group-remove').attr('data-remove-group', nextGroupId);
 
+                    clone.find('.mbt-fields-group-clone').attr('data-clone-group', nextGroupId);
+
                     clone.find('.mbt-fields-group-order .mbt-fields-group-down').addClass('disabled');
+
+                    clone.addClass('mbt-fields-group-new');
 
                     clone.insertBefore($(this).parent());
 
                     // Reset group ids.
                     MBT._resetGroupFieldIds($this.find('.mbt-fields-group'));
 
-                    $this.find('.mbt-fields-group-footer').show();
+                    $this.find('.mbt-fields-group-footer a.mbt-fields-group-order').removeClass('disabled');
+                    $this.find('.mbt-fields-group-footer a.mbt-fields-group-remove').removeClass('disabled');
 
                     firstGroup.find('.mbt-fields-group-order .mbt-fields-group-up').addClass('disabled');
                 });
@@ -253,8 +279,11 @@
             $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-fields-group .mbt-fields-group-title', 'click', function() {
                 MBT._groupFieldToggle(this);
             } );
-            $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-fields-group .mbt-fields-group-remove', 'click', function() {
+            $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-fields-group a.mbt-fields-group-remove', 'click', function() {
                 MBT._groupFieldRemove(this);
+            } );
+            $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-fields-group a.mbt-fields-group-clone', 'click', function() {
+                MBT._groupFieldClone(this);
             } );
             $('body').delegate( '.mbt-metabox-tabs-wrapper .mbt-fields-group .mbt-fields-group-up', 'click', function() {
                 MBT._groupFieldMoveUp(this);
@@ -457,12 +486,36 @@
                 complete: function() {
                     $(this).remove();
                     if ( parent.find('.mbt-fields-group').length === 1 ) {
-                        parent.find('.mbt-fields-group .mbt-fields-group-footer').hide();
+                        parent.find('.mbt-fields-group .mbt-fields-group-footer .mbt-fields-group-order a').addClass('disabled');
+                        parent.find('.mbt-fields-group .mbt-fields-group-footer a.mbt-fields-group-remove').addClass('disabled');
                     }
                     parent.find('.mbt-fields-group:first').find('.mbt-fields-group-up').addClass('disabled');
+                    MBT._resetGroupFieldButtons(parent);
                     MBT._resetGroupFieldIds(parent.find('.mbt-fields-group'));
                 }
             });
+        },
+
+        /**
+		 * Clone group.
+		 *
+		 * @since 1.0
+		 * @access private
+		 * @method _groupFieldClone
+		 */
+        _groupFieldClone: function(button)
+        {
+            var groupId = $(button).data('clone-group'),
+                group   = $(button).parents('.mbt-fields-group[data-group-id="'+groupId+'"]'),
+                clone   = group.clone(),
+                parent  = group.parent();
+
+            clone.insertAfter(group);
+
+            parent.find('.mbt-fields-group:first').find('.mbt-fields-group-up').addClass('disabled');
+
+            MBT._resetGroupFieldButtons(parent);
+            MBT._resetGroupFieldIds(parent.find('.mbt-fields-group'));
         },
 
         /**
@@ -517,6 +570,9 @@
             groupsParent.find('.mbt-fields-group:first').find('.mbt-fields-group-down').removeClass('disabled');
             groupsParent.find('.mbt-fields-group:last').find('.mbt-fields-group-up').removeClass('disabled');
             groupsParent.find('.mbt-fields-group:last').find('.mbt-fields-group-down').addClass('disabled');
+            if ( groupsParent.find('.mbt-fields-group').length > 1 ) {
+                groupsParent.find('.mbt-fields-group .mbt-fields-group-remove').removeClass('disabled');
+            }
         },
 
         /**
@@ -542,9 +598,11 @@
                 // Update group id.
                 group.attr('data-group-id', groupId);
                 // Update group title.
-                group.find('.mbt-fields-group-title').html(title + ' ' + groupId);
+                group.find('.mbt-fields-group-title .mbt-group-field-title-text').html(title + ' ' + groupId);
                 // Update group id in remove button.
                 group.find('.mbt-fields-group-remove').attr('data-remove-group', groupId);
+                // Update group id in clone button.
+                group.find('.mbt-fields-group-clone').attr('data-clone-group', groupId);
 
                 // Update sub fields.
                 subFields.forEach(function(obj) {
@@ -564,7 +622,7 @@
                             if ( $(this).hasClass('mbt-img-url') ) {
                                 suffix = '[url]';
                             }
-                            if (  $(this).hasClass('mbt-img-id') ) {
+                            if ( $(this).hasClass('mbt-img-id') ) {
                                 suffix = '[id]';
                             }
                         }

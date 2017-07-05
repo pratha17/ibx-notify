@@ -15,38 +15,63 @@ MetaBox_Tabs::add_meta_box( array(
                     'title'             => __('Configuration', 'ibx-notify'),
                     'description'       => __('The section below is for configuration. You can set it as per your requirements.', 'ibx-notify'),
                     'fields'            => array(
+                        'active_check'      => array(
+                            'type'              => 'checkbox',
+                            'label'             => __('Active?', 'ibx-notify'),
+                            'default'           => '1',
+                            'sanitize'          => false,
+                            'description'       => __('If checked, this will activate the notification.', 'ibx-notify'),
+                        ),
                         'type'  => array(
                             'type'      => 'select',
                             'label'     => __('Type' , 'ibx-notify'),
-                            'default'   => 'not_bar',
+                            'default'   => 'fomo_bar',
                             'options'   => array(
-                                'not_bar'   => __('Notification Bar', 'ibx-notify'),
-                                'msg'       => __('Custom Message', 'ibx-notify'),
-                                'purchase'      => __('Purchase Notification', 'ibx-notify'),
-                                'reviews'   => __('Reviews', 'ibx-notify'),
+                                'fomo_bar'   => __('Fomo Bar', 'ibx-notify'),
+                                'conversion' => __('Conversions', 'ibx-notify'),
+                                'reviews'    => __('Reviews', 'ibx-notify'),
                             ),
                             'toggle'  => array(
-                                'not_bar'   => array(
+                                'fomo_bar'   => array(
                                     'sections'  => array('countdown'),
-                                    'fields'    => array('not_description', 'sticky','text_color', 'background_color', 'countdown_text_color', 'countdown_background_color', 'show_delay', 'hide'),
+                                    'fields'    => array('fomo_desc', 'sticky', 'clickable','text_color', 'background_color', 'countdown_text_color', 'countdown_background_color'),
                                 ),
-                                'msg' => array(
-                                    'fields'    => array('msg_section', 'position', 'text_color', 'background_color', 'show_delay')
-                                ),
-                                'purchase' => array(
-                                    'fields'    => array('purchase_group', 'clickable', 'show_delay', 'hide', 'position', 'name_color', 'text_color', 'background_color')
+                                'conversion' => array(
+                                    'sections'  => array('image_option'),
+                                    'fields'    => array('message_format', 'conversion_group', 'position', 'name_color', 'text_color', 'background_color', 'max_per_page', 'delay_between', 'random', 'loop', 'randomize')
                                 ),
                                 'reviews' => array(
-                                    'fields'    => array('reviews_group', 'clickable', 'show_delay', 'hide', 'position', 'text_color', 'background_color', 'star_color')
+                                    'fields'    => array('reviews_group', 'rating', 'position', 'text_color', 'background_color', 'star_color', 'max_per_page', 'delay_between', 'random', 'loop', 'randomize')
                                 ),
                             ),
                         ),
-                        'active_check' => array(
+                        'message_format'   => array(
+                            'type'          => 'textarea',
+                            'label'         => __('Notification Format', 'ibx-notify'),
+                            'rows'          => 3,
+                            'default'       => __('{{name}} from {{city}} just signed up for our newsletter!', 'ibx-notify'),
+                            'help'          => __('Variables: {{name}}, {{city}}, {{state}}, {{country}}, {{title}}', 'ibx-notify'),
+                        ),
+                    ),
+                ),
+                'image_option'    => array(
+                    'title'             => __('Image Options', 'ibx-notify'),
+                    'fields'            => array(
+                        'customer_avatar' => array(
                             'type'          => 'checkbox',
-                            'label'         => __('Active?', 'ibx-notify'),
-                            'default'       => '1',
-                            'sanitize'      => false,
-                            'description'   => __('If checked, this will activate the box.', 'ibx-notify'),
+                            'label'         => __('Use customer avatar as image', 'ibx-notify'),
+                            'description'   => __('This requires a customer email address.', 'ibx-notify'),
+                        ),
+                        'disable_img' => array(
+                            'type'          => 'checkbox',
+                            'label'         => __('Force Disable Images', 'ibx-notify'),
+                            'description'   => __('If checked, it will not display any images in notification.', 'ibx-notify'),
+                        ),
+                        'default_img_url' => array(
+                            'type'          => 'photo',
+                            'label'         => __('Default Image URL', 'ibx-notify'),
+                            'description'   => __('Upload an image or paste external URL of image.', 'ibx-notify'),
+                            'help'          => __('Default images are \'backup\' images for new notification. If an image is provided, it will override the default.', 'ibx-notify'),
                         ),
                     ),
                 ),
@@ -59,11 +84,11 @@ MetaBox_Tabs::add_meta_box( array(
                     'title'             => __('Content', 'ibx-notify'),
                     'description'       => __('The section below is to write your content.', 'ibx-notify'),
                     'fields'            => array(
-                        'not_description'   => array(
-                            'type'          => 'editor',
+                        'fomo_desc'   => array(
+                            'type'          => 'textarea',
                             'label'         => __('Notification Description', 'ibx-notify'),
                             'default'       => __('Message You want to display.', 'ibx-notify'),
-                            'rows'          => 6
+                            'rows'          => 3
                         ),
                         'sticky'            => array(
                             'type'              => 'checkbox',
@@ -72,18 +97,12 @@ MetaBox_Tabs::add_meta_box( array(
                             'sanitize'          => false,
                             'description'       => __('If checked, this will fixed Notification Bar on the top.', 'ibx-notify'),
                         ),
-                        'msg_section'       => array(
-                            'type'              => 'editor',
-                            'label'             => __('Custom Message', 'ibx-notify'),
-                            'default'           => __('Message You want to display.', 'ibx-notify'),
-                            'rows'              => 6
-                        ),
                         'clickable'         => array(
                             'type'              => 'checkbox',
                             'label'             => __('Clickable?', 'ibx-notify'),
                             'default'           => '0',
                             'sanitize'          => false,
-                            'help'              => __('Check this if you want to make this Clickable and redirect to some url.', 'ibx-notify'),
+                            'description'       => __('Check this if you want to make this clickable and redirect to some URL.', 'ibx-notify'),
                             'toggle'            => array(
                                 '1'                 => array(
                                     'fields'            => array('url' )
@@ -95,24 +114,44 @@ MetaBox_Tabs::add_meta_box( array(
                             'label'             => __('URL', 'ibx-notify'),
                             'default'           => '',
                         ),
-                        'purchase_group'        => array(
+                        'conversion_group'        => array(
                             'type'              => 'group',
-                            'title'             => __('Purchase', 'ibx-notify'),
+                            'title'             => __('Conversions', 'ibx-notify'),
                             'fields'            => array(
+                                'title'              => array(
+                                    'type'          => 'text',
+                                    'label'         => __('Title', 'ibx-notify'),
+                                    'default'       => '',
+                                ),
                                 'name'              => array(
                                     'type'          => 'text',
                                     'label'         => __('Name', 'ibx-notify'),
                                     'default'       => '',
                                 ),
+                                'email'           => array(
+                                    'type'          => 'text',
+                                    'label'         => __('Email Address', 'ibx-notify'),
+                                ),
+                                'city'           => array(
+                                    'type'          => 'text',
+                                    'label'         => __('City', 'ibx-notify'),
+                                ),
+                                'state'           => array(
+                                    'type'          => 'text',
+                                    'label'         => __('State', 'ibx-notify'),
+                                ),
+                                'country'           => array(
+                                    'type'          => 'text',
+                                    'label'         => __('Country', 'ibx-notify'),
+                                ),
                                 'image'         => array(
                                     'type'          => 'photo',
                                     'label'         => __('Image', 'ibx-notify'),
                                 ),
-                                'msg'           => array(
-                                    'type'          => 'textarea',
-                                    'label'         => __('Message', 'ibx-notify'),
-                                    'default'       => '',
-                                    'rows'          => 2
+                                'msg_url'               => array(
+                                    'type'              => 'text',
+                                    'label'             => __('URL', 'ibx-notify'),
+                                    'default'           => '',
                                 ),
                             ),
                         ),
@@ -120,9 +159,40 @@ MetaBox_Tabs::add_meta_box( array(
                             'type'              => 'group',
                             'title'             => __('Reviews', 'ibx-notify'),
                             'fields'            => array(
-                                'image'     => array(
-                                    'type'      => 'photo',
-                                    'label'     => __('Image', 'ibx-notify'),
+                                'title'              => array(
+                                    'type'          => 'text',
+                                    'label'         => __('Title', 'ibx-notify'),
+                                    'default'       => '',
+                                ),
+                                'name'              => array(
+                                    'type'          => 'text',
+                                    'label'         => __('Name', 'ibx-notify'),
+                                    'default'       => '',
+                                ),
+                                'email'           => array(
+                                    'type'          => 'text',
+                                    'label'         => __('Email Address', 'ibx-notify'),
+                                ),
+                                'city'           => array(
+                                    'type'          => 'text',
+                                    'label'         => __('City', 'ibx-notify'),
+                                ),
+                                'state'           => array(
+                                    'type'          => 'text',
+                                    'label'         => __('State', 'ibx-notify'),
+                                ),
+                                'country'           => array(
+                                    'type'          => 'text',
+                                    'label'         => __('Country', 'ibx-notify'),
+                                ),
+                                'image'         => array(
+                                    'type'          => 'photo',
+                                    'label'         => __('Image', 'ibx-notify'),
+                                ),
+                                'msg_url'               => array(
+                                    'type'              => 'text',
+                                    'label'             => __('URL', 'ibx-notify'),
+                                    'default'           => '',
                                 ),
                                 'rating'    => array(
                                     'type'      => 'select',
@@ -136,15 +206,8 @@ MetaBox_Tabs::add_meta_box( array(
                                         '5'         => __('5', 'ibx-notify'),
                                     ),
                                 ),
-                                'msg'       => array(
-                                    'type'      => 'textarea',
-                                    'label'     => __('Message', 'ibx-notify'),
-                                    'default'   => '',
-                                    'rows'      => 2
-                                ),
                             ),
                         ),
-
                     ),
                 ),
                 'countdown' => array(
@@ -155,7 +218,6 @@ MetaBox_Tabs::add_meta_box( array(
                             'label'             => __('Enable Countdown?', 'ibx-notify'),
                             'default'           => '0',
                             'sanitize'          => false,
-                            'description'       => __('If checked, this will activate Countdown.', 'ibx-notify'),
                             'toggle'            => array(
                                 '1'                 => array(
                                     'fields'            => array('countdown_text', 'countdown_time' )
@@ -266,66 +328,82 @@ MetaBox_Tabs::add_meta_box( array(
                             'default'            => 'all',
                             'options'            => array(
                                 'all'                => __('All Visitors', 'ibx-notify'),
-                                'new'                => 'New Visitors Only',
-                                'returning'          => 'Returning Visitors Only',
+                                'new'                => __('New Visitors Only', 'ibx-notify'),
+                                'returning'          => __('Returning Visitors Only', 'ibx-notify')
                             ),
                         ),
-                        'show_delay'        => array(
+                    ),
+                ),
+                'behavior' => array(
+                    'title'     => __('Behavior', 'ibx-notify'),
+                    'fields'    => array(
+                        'initial_delay'   => array(
                             'type'              => 'number',
-                            'label'             => __('Appear after', 'ibx-notify'),
-                            'description'       => __('seconds', 'ibx-notify'),
+                            'label'             => __('Initial Delay', 'ibx-notify'),
+                            'default'           => __('5', 'ibx-notify'),
+                            'description'       => __('in seconds', 'ibx-notify'),
+                            'help'              =>__('Initial delay of displaying first notification.', 'ibx-notify'),
                         ),
-                        'hide'              => array(
-                            'type'              => 'select',
-                            'label'             => __('When it should disappear?', 'ibx-notify'),
-                            'default'           => 'click',
-                            'options'           => array(
-                                'never'             => __('Never', 'ibx-notify'),
-                                'click'             => __('When user clicks hide', 'ibx-notify'),
-                                'delay'             => __('Delay of some time', 'ibx-notify'),
-                            ),
-                            'toggle'        => array(
-                                // 'never'         => array(
-                                //     'fields'        => array('transition_delay')
-                                // ),
-                                // 'click'         => array(
-                                //     'fields'        => array('transition_delay')
-                                // ),
-                                'delay'         => array(
-                                    'fields'        => array('hide_delay')
-                                ),
-                            ),
-                        ),
-                        'hide_delay'        => array(
+                        'max_per_page'   => array(
                             'type'              => 'number',
-                            'label'             => __('Disappear after', 'ibx-notify'),
-                            'description'       => __('seconds', 'ibx-notify'),
+                            'label'             => __('Max Per Page', 'ibx-notify'),
+                            'default'           => __('5', 'ibx-notify'),
+                            'help'              =>__('Limit the number of notifications to be displayed per page.', 'ibx-notify'),
                         ),
-                        // 'transition_delay'        => array(
-                        //     'type'              => 'number',
-                        //     'label'             => __('Transition Delay', 'ibx-notify'),
-                        //     'description'       => __('seconds', 'ibx-notify'),
-                        // ),
-                        // 'how_often'         => array(
-                        //     'type'              => 'select',
-                        //     'label'             => __('How often it should appear to each visitor?', 'ibx-notify'),
-                        //     'default'           => 'always',
-                        //     'options'           => array(
-                        //         'always'            => __('Everytime page load', 'ibx-notify'),
-                        //         'user_interacts'    => __('Hide after user interacts (clicks link or submits email)', 'ibx-notify'),
-                        //         'hide_for'          => __('Show, then hide for some days', 'ibx-notify'),
-                        //     ),
-                        //     'toggle'        => array(
-                        //         'hide_for'      => array(
-                        //             'fields'    => array('hide_for_days')
-                        //         ),
-                        //     ),
-                        // ),
-                        // 'hide_for_days'     => array(
-                        //     'type'              => 'number',
-                        //     'label'             => __('Hide for', 'ibx-notify'),
-                        //     'description'       => __('days', 'ibx-notify'),
-                        // ),
+                        'display_time'   => array(
+                            'type'              => 'number',
+                            'label'             => __('Display Time', 'ibx-notify'),
+                            'default'           => __('6', 'ibx-notify'),
+                            'description'       => __('in seconds', 'ibx-notify'),
+                            'help'              =>__('Total duration of each notification to be displayed.', 'ibx-notify'),
+                        ),
+                        'delay_between'   => array(
+                            'type'              => 'number',
+                            'label'             => __('Delay between notifications', 'ibx-notify'),
+                            'default'           => __('12', 'ibx-notify'),
+                            'description'       => __('in seconds', 'ibx-notify'),
+                            'help'              =>__('Delay between each notifications.', 'ibx-notify'),
+                        ),
+                    ),
+                ),
+                'display_setting' => array(
+                    'title'     => __('Display Settings', 'ibx-notify'),
+                    'fields'    => array(
+                        'random'   => array(
+                            'type'              => 'checkbox',
+                            'label'             => __('Display notification in random order', 'ibx-notify'),
+                            'help'              =>__('Notifications will appear in a random way.', 'ibx-notify'),
+                        ),
+                        'loop'   => array(
+                            'type'              => 'checkbox',
+                            'label'             => __('Loop notification', 'ibx-notify'),
+                            'help'              =>__('Repeats the sequence of your notifications, if visitor still on page when they run out.', 'ibx-notify'),
+                        ),
+                        'hide_mobile'   => array(
+                            'type'              => 'checkbox',
+                            'label'             => __('Hide on Mobile', 'ibx-notify'),
+                            'help'              =>__('It will disable notifications on mobile screen.', 'ibx-notify'),
+                        ),
+                        'hide_desktop'   => array(
+                            'type'              => 'checkbox',
+                            'label'             => __('Hide on Desktop', 'ibx-notify'),
+                            'help'              =>__('It will disable notifications on desktop screen.', 'ibx-notify'),
+                        ),
+                        'closable'   => array(
+                            'type'              => 'checkbox',
+                            'label'             => __('Allow users to close notifications', 'ibx-notify'),
+                            'help'              =>__('Display a cross at the top right of the notification box.', 'ibx-notify'),
+                        ),
+                        'randomize'   => array(
+                            'type'              => 'checkbox',
+                            'label'             => __('Randomize delay between notifications', 'ibx-notify'),
+                            'help'              =>__('Makes notifications seem more lifelike by randomizing the delay between them.', 'ibx-notify'),
+                        ),
+                        'trigger'   => array(
+                            'type'              => 'checkbox',
+                            'label'             => __('Trigger notifications link to open in new tab', 'ibx-notify'),
+                            'help'              =>__('When a user clicks on the notifications the link will open in new tab.', 'ibx-notify'),
+                        ),
                     ),
                 ),
             ),

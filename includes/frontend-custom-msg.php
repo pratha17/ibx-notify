@@ -3,7 +3,7 @@
 
     <div class="ibx-notify-cust-msg <?php echo $id;?>" datalist="<?php echo $id;?>">
         <a href="<?php echo $href;?>" class="<?php echo $c;?>">
-            <div class="ibx-notify-wraper msg-zoon-in <?php if ( $settings->position == 'bottom-right' ){ echo 'wraper-right';}else{ echo 'wraper-left'; }?> " datalist="<?php echo $settings->show_delay; ?>" >
+            <div class="ibx-notify-wraper msg-zoon-in <?php if ( $settings->position == 'bottom-right' ){ echo 'wraper-right';}else{ echo 'wraper-left'; }?> " datalist="<?php echo $settings->initial_delay; ?>" >
                 <div class="ibx-notify-container">
                         <div class="ibx-notify-text">
                             <?php echo ( $settings->msg_section); ?>

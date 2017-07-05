@@ -2,9 +2,9 @@
 
 jQuery(window).load(function() {
     // get time of show notification on condition and delay time
-    var get_show        = jQuery('.ibx-notify-notification-bar-wraper').attr('datalist');
-    var get_hide_type   = jQuery('.ibx-notify-notification-bar-wraper .container').attr('datalist');
-    var get_delay       = jQuery('.ibx-notify-notification-bar-wraper').attr('data-time');
+    var get_show        = jQuery('.ibx-fomo-bar-wrapper').attr('datalist');
+    var get_hide_type   = jQuery('.ibx-fomo-bar-wrapper .container').attr('datalist');
+    var get_delay       = jQuery('.ibx-fomo-bar-wrapper').attr('data-time');
 
     var noti_timer  =   setInterval( showBar, ( get_show * 1000 ) );
 
@@ -12,12 +12,12 @@ jQuery(window).load(function() {
         // set position of notification bar
         var height      =   jQuery('#wpadminbar').outerHeight();
 
-        jQuery( '.ibx-notify-notification-bar-wraper' ).css({
+        jQuery( '.ibx-fomo-bar-wrapper' ).css({
             "margin-top":   ( 0 + height ) + 'px',
             "transition":   "margin-top 0.3s ease",
         });
 
-        var noti_height = jQuery('.ibx-notify-notification-bar-wraper').outerHeight();
+        var noti_height = jQuery('.ibx-fomo-bar-wrapper').outerHeight();
 
         jQuery('body').css({
             "margin-top":   noti_height + 'px',
@@ -26,7 +26,7 @@ jQuery(window).load(function() {
 
 // ============= COOKIE ==================
         // get counter time
-        var get_value   =   jQuery('.ibx-notify-notification-bar-wraper .timer-counter').attr('data-time');
+        var get_value   =   jQuery('.ibx-fomo-bar-wrapper .timer-counter').attr('data-time');
             if ( get_value ) { get_value   =   get_value; }else{ get_value   =   '0,0,0,0'; }
         // split time
         var tmp_day     =   get_value.split(/\,/)[0];
@@ -75,20 +75,20 @@ jQuery(window).load(function() {
             var hours       =   Math.floor( ( distance % ( 1000 * 60 * 60 * 24 )) / ( 1000 * 60 * 60 ));
             var minutes     =   Math.floor( ( distance % ( 1000 * 60 * 60 )) / ( 1000 * 60 ));
             var seconds     =   Math.floor( ( distance % ( 1000 * 60 )) / 1000 );
-            // Output the result in an element with id="ibx-notify-notification-bar-start"
-            jQuery(".ibx-notify-notification-bar-wraper #start").html(  '<b>' + days + "</b> " +
+            // Output the result in an element with id="ibx-fomo-bar-start"
+            jQuery(".ibx-fomo-bar-wrapper #start").html(  '<b>' + days + "</b> " +
                                                                 '<b>' + hours + "</b> " +
                                                                 '<b>' + minutes + "</b> " +
                                                                 '<b>' + seconds + "</b> " );
             // If the count down is over, write some text
             if (distance < 0) {
                 clearInterval(x);
-                jQuery(".ibx-notify-notification-bar-wraper #start").html("<b>EXPIRED</b>");
+                jQuery(".ibx-fomo-bar-wrapper #start").html("<b>EXPIRED</b>");
             }
         }, 1000);
 
-        jQuery('.ibx-notify-notification-bar-wraper .close').click(function(){
-            jQuery('.ibx-notify-notification-bar-wraper').css({
+        jQuery('.ibx-fomo-bar-wrapper .close').click(function(){
+            jQuery('.ibx-fomo-bar-wrapper').css({
                 "margin-top": '-100px',
                 "transition": "margin-top 0.3s ease",
             });
@@ -101,7 +101,7 @@ jQuery(window).load(function() {
             var noti_hide_timer =   setTimeout( hideBar, (get_delay) * 1000 );
             function hideBar(){
                 // set position of notification bar
-                jQuery( '.ibx-notify-notification-bar-wraper' ).css({
+                jQuery( '.ibx-fomo-bar-wrapper' ).css({
                     "margin-top":   '-100px',
                     "transition":   "margin-top 0.3s ease",
                 });
@@ -155,15 +155,15 @@ jQuery(window).load(function() {
 
 // poup timmer
 jQuery(window).load(function() {
-    jQuery('.ibx-notify-popup').each(function(){
+    jQuery('.ibx-notification-popup').each(function(){
     });
 
 
-    jQuery('.ibx-notify-popup').each(function(){
+    jQuery('.ibx-notification-popup').each(function(){
         var popup_id        =   jQuery( this ).attr('datalist'); //id
         console.log(popup_id);
 
-            if ( jQuery( '.ibx-notify-popup' ).hasClass(popup_id) ) {
+            if ( jQuery( '.ibx-notification-popup' ).hasClass(popup_id) ) {
                 var appear_after        =   ( jQuery( '.' + popup_id + ' .ibx-notify-text-wraper').attr('datalist') ) * 1000; //show
                 var hide_type           =   jQuery( '.' + popup_id + ' .ibx-notify-text-wrap').attr('data-time'); // hide type
                 var disappear_after     =   ( jQuery( '.' + popup_id + ' .ibx-notify-text-content').attr('data-time') ) * 1000; //hide
@@ -179,7 +179,7 @@ jQuery(window).load(function() {
         var container_box   =   '';
 
         if ( 'delay' == hide_type && appear_after != '' && disappear_after != '' ) {
-            var container   =   jQuery( '.' + popup_id + ' .ibx-notify-popup-wraper' ); // creat a variable with name of div
+            var container   =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wraper' ); // creat a variable with name of div
             var timer       =   setInterval( showDiv, appear_after ); // Set Timer for the first time load
             console.log(container);
         }
@@ -194,7 +194,7 @@ jQuery(window).load(function() {
                     timeout     =   setTimeout( timeoutDiv, disappear_after);
 
                         // mouse hover
-                        jQuery('.ibx-notify-popup-wraper').hover(function(ev){
+                        jQuery('.ibx-notification-popup-wraper').hover(function(ev){
                             clearInterval(timeout); // if mouse hover on div then stop timmer
                         }, function(ev){
                             timeout     =   setTimeout( timeoutDiv, disappear_after); // mouse out then again start timmer
@@ -218,7 +218,7 @@ jQuery(window).load(function() {
             var disappear_after     =   ( jQuery( '.' + popup_id + ' .ibx-notify-text-content').attr('data-time') ) * 1000; //hide
             var transition_delay    =   ( jQuery( '.' + popup_id + ' .ibx-notify-text-wraper').attr('data-time') ) * 1000; //show
 
-            var container_box   =   jQuery( '.' + popup_id + ' .ibx-notify-popup-wraper' );
+            var container_box   =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wraper' );
             timer_box           =   setInterval( showTextDiv, appear_after );
         }
         var count_box   =   0;
@@ -239,10 +239,10 @@ jQuery(window).load(function() {
             }
 
 // click on close hide div
-        jQuery( '.' + popup_id + ' .ibx-notify-popup-wraper .close' ).click(function(){
+        jQuery( '.' + popup_id + ' .ibx-notification-popup-wraper .close' ).click(function(){
             // clearInterval(timer);
             // clearInterval(timer_box);
-            jQuery('.' + popup_id + ' .ibx-notify-popup-wraper').css('opacity','0');
+            jQuery('.' + popup_id + ' .ibx-notification-popup-wraper').css('opacity','0');
         });
 
     });

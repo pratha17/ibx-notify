@@ -1,0 +1,3 @@
+input.mbt-input-field:not([type="checkbox"]):not([type="radio"]):not([type="number"]) {
+    min-width: 335px;
+}
