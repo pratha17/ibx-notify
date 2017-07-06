@@ -179,7 +179,7 @@ jQuery(window).load(function() {
         var container_box   =   '';
 
         if ( 'delay' == hide_type && appear_after != '' && disappear_after != '' ) {
-            var container   =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wraper' ); // creat a variable with name of div
+            var container   =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wrapper' ); // creat a variable with name of div
             var timer       =   setInterval( showDiv, appear_after ); // Set Timer for the first time load
             console.log(container);
         }
@@ -194,7 +194,7 @@ jQuery(window).load(function() {
                     timeout     =   setTimeout( timeoutDiv, disappear_after);
 
                         // mouse hover
-                        jQuery('.ibx-notification-popup-wraper').hover(function(ev){
+                        jQuery('.ibx-notification-popup-wrapper').hover(function(ev){
                             clearInterval(timeout); // if mouse hover on div then stop timmer
                         }, function(ev){
                             timeout     =   setTimeout( timeoutDiv, disappear_after); // mouse out then again start timmer
@@ -218,7 +218,7 @@ jQuery(window).load(function() {
             var disappear_after     =   ( jQuery( '.' + popup_id + ' .ibx-notify-text-content').attr('data-time') ) * 1000; //hide
             var transition_delay    =   ( jQuery( '.' + popup_id + ' .ibx-notify-text-wraper').attr('data-time') ) * 1000; //show
 
-            var container_box   =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wraper' );
+            var container_box   =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wrapper' );
             timer_box           =   setInterval( showTextDiv, appear_after );
         }
         var count_box   =   0;
@@ -239,10 +239,10 @@ jQuery(window).load(function() {
             }
 
 // click on close hide div
-        jQuery( '.' + popup_id + ' .ibx-notification-popup-wraper .close' ).click(function(){
+        jQuery( '.' + popup_id + ' .ibx-notification-popup-wrapper .close' ).click(function(){
             // clearInterval(timer);
             // clearInterval(timer_box);
-            jQuery('.' + popup_id + ' .ibx-notification-popup-wraper').css('opacity','0');
+            jQuery('.' + popup_id + ' .ibx-notification-popup-wrapper').css('opacity','0');
         });
 
     });

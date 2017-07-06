@@ -134,7 +134,7 @@ jQuery(window).load(function() {
             var count           =   0;
             var container       =   '';
 
-            var container       =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wraper' ); // creat a variable with name of div
+            var container       =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wrapper' ); // creat a variable with name of div
 
             var first_appear    =   setInterval( firstShow, initial_delay );
 

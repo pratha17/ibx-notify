@@ -37,17 +37,18 @@ MetaBox_Tabs::add_meta_box( array(
                                     'fields'    => array('fomo_desc', 'sticky', 'clickable','text_color', 'background_color', 'countdown_text_color', 'countdown_background_color'),
                                 ),
                                 'conversion' => array(
-                                    'sections'  => array('image_option'),
-                                    'fields'    => array('message_format', 'conversion_group', 'position', 'name_color', 'text_color', 'background_color', 'max_per_page', 'delay_between', 'random', 'loop', 'randomize')
+                                    'sections'  => array( 'image_option'),
+                                    'fields'    => array( 'notification_msg', 'conversion_group', 'position', 'text_color', 'background_color', 'link_color', 'round_corners', 'img_padding', 'max_per_page', 'delay_between', 'random', 'loop', 'randomize', 'link_target' )
                                 ),
                                 'reviews' => array(
-                                    'fields'    => array('reviews_group', 'rating', 'position', 'text_color', 'background_color', 'star_color', 'max_per_page', 'delay_between', 'random', 'loop', 'randomize')
+                                    'sections'  => array( 'image_option'),
+                                    'fields'    => array( 'notification_msg', 'reviews_group', 'position', 'text_color', 'background_color', 'link_color', 'round_corners', 'img_padding', 'star_color', 'max_per_page', 'delay_between', 'random', 'loop', 'randomize', 'link_target' )
                                 ),
                             ),
                         ),
-                        'message_format'   => array(
+                        'notification_msg'   => array(
                             'type'          => 'textarea',
-                            'label'         => __('Notification Format', 'ibx-notify'),
+                            'label'         => __('Notification Message', 'ibx-notify'),
                             'rows'          => 3,
                             'default'       => __('{{name}} from {{city}} just signed up for our newsletter!', 'ibx-notify'),
                             'help'          => __('Variables: {{name}}, {{city}}, {{state}}, {{country}}, {{title}}', 'ibx-notify'),
@@ -65,7 +66,14 @@ MetaBox_Tabs::add_meta_box( array(
                         'disable_img' => array(
                             'type'          => 'checkbox',
                             'label'         => __('Force Disable Images', 'ibx-notify'),
-                            'description'   => __('If checked, it will not display any images in notification.', 'ibx-notify'),
+                            'default'           => '0',
+                            'sanitize'          => false,
+                            'description'       => __('If checked, it will not display any images in notification.', 'ibx-notify'),
+                            'toggle'            => array(
+                                '1'                 => array(
+                                    'fields'            => array('img_padding' )
+                                ),
+                            ),
                         ),
                         'default_img_url' => array(
                             'type'          => 'photo',
@@ -105,7 +113,7 @@ MetaBox_Tabs::add_meta_box( array(
                             'description'       => __('Check this if you want to make this clickable and redirect to some URL.', 'ibx-notify'),
                             'toggle'            => array(
                                 '1'                 => array(
-                                    'fields'            => array('url' )
+                                    'fields'            => array('url', 'link_target' )
                                 ),
                             ),
                         ),
@@ -252,11 +260,6 @@ MetaBox_Tabs::add_meta_box( array(
                                 'bottom-right'  => __('Bottom Right', 'ibx-notify'),
                             ),
                         ),
-                        'name_color'    => array(
-                            'type'      => 'color',
-                            'label'     => __('Name Color', 'ibx-notify'),
-                            'default'   => '#000000',
-                        ),
                         'text_color'    => array(
                             'type'      => 'color',
                             'label'     => __('Text Color', 'ibx-notify'),
@@ -268,22 +271,77 @@ MetaBox_Tabs::add_meta_box( array(
                             'default'       => '#ffffff',
                         ),
                         'countdown_text_color'    => array(
-                            'type'      => 'color',
-                            'label'     => __('Countdown Text Color', 'ibx-notify'),
-                            'default'   => '#000000',
+                            'type'                  => 'color',
+                            'label'                 => __('Countdown Text Color', 'ibx-notify'),
+                            'default'               => '#000000',
                         ),
                         'countdown_background_color'  => array(
+                            'type'                      => 'color',
+                            'label'                     => __('Countdown Background Color', 'ibx-notify'),
+                            'default'                   => '#ffffff',
+                        ),
+                        'link_color'  => array(
                             'type'          => 'color',
-                            'label'         => __('Countdown Background Color', 'ibx-notify'),
+                            'label'         => __('Link Color', 'ibx-notify'),
                             'default'       => '#ffffff',
+                        ),
+                        'img_padding'  => array(
+                            'type'          => 'number',
+                            'label'         => __('Image Padding', 'ibx-notify'),
+                            'default'       => '0',
+                            'description'   => 'px',
                         ),
                         'star_color'      => array(
                             'type'          => 'color',
                             'label'         => __('Rating Star Color', 'ibx-notify'),
                             'default'       => '#000000',
                         ),
+                        'round_corners'  => array(
+                            'type'          => 'number',
+                            'label'         => __('Round Corners', 'ibx-notify'),
+                            'default'       => '0',
+                            'description'   => 'px',
+                        ),
                     ),
                 ),
+                'border'    => array(
+                    'title'     => __('Border', 'ibx-notify'),
+                    'fields'    => array(
+                        'border'  => array(
+                            'type'          => 'number',
+                            'label'         => __('Border Stroke', 'ibx-notify'),
+                            'default'       => '0',
+                            'description'   => 'px',
+                        ),
+                        'border_color'  => array(
+                            'type'          => 'color',
+                            'label'         => __('Color', 'ibx-notify'),
+                            'default'       => '#000000',
+                        ),
+                    )
+                ),
+                'box_shadow'    => array(
+                    'title'         => __('Shadow', 'ibx-notify'),
+                    'fields'        => array(
+                        'shadow_strength'  => array(
+                            'type'          => 'number',
+                            'label'         => __('Strength', 'ibx-notify'),
+                            'default'       => '0',
+                            'description'   => 'px',
+                        ),
+                        'shadow_blur'  => array(
+                            'type'          => 'number',
+                            'label'         => __('Blur', 'ibx-notify'),
+                            'default'       => '0',
+                            'description'   => 'px',
+                        ),
+                        'shadow_color'  => array(
+                            'type'          => 'color',
+                            'label'         => __('Color', 'ibx-notify'),
+                            'default'       => '#999999',
+                        ),
+                    )
+                )
             ),
         ),
         'visibility' => array(
@@ -399,9 +457,9 @@ MetaBox_Tabs::add_meta_box( array(
                             'label'             => __('Randomize delay between notifications', 'ibx-notify'),
                             'help'              =>__('Makes notifications seem more lifelike by randomizing the delay between them.', 'ibx-notify'),
                         ),
-                        'trigger'   => array(
+                        'link_target'   => array(
                             'type'              => 'checkbox',
-                            'label'             => __('Trigger notifications link to open in new tab', 'ibx-notify'),
+                            'label'             => __('Open notifications link in new tab', 'ibx-notify'),
                             'help'              =>__('When a user clicks on the notifications the link will open in new tab.', 'ibx-notify'),
                         ),
                     ),

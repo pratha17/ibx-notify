@@ -48,7 +48,7 @@
                         <span class="ibx-fomo-hours">00</span>
                         <span class="ibx-fomo-minutes">00</span>
                         <span class="ibx-fomo-seconds">00</span>
-                        <span class="ibx-fomo-expired"><?php esc_html_e('Expired!', 'ibx-notify'); ?></span>
+                        <span class="ibx-fomo-expired-text"><?php esc_html_e('Expired!', 'ibx-notify'); ?></span>
                     </p>
                 </div>
             </div>
@@ -69,11 +69,22 @@
         background: <?php if ( $settings->background_color != '' ) { echo $settings->background_color; } else { echo '#ffffff'; } ?>;
         color: <?php if ( $settings->text_color != '' ) { echo $settings->text_color; } else { echo '#000000'; } ?>;
         position: <?php if ( $settings->sticky == 1 ) { echo 'fixed'; } else { echo 'absolute'; } ?>;
-        top: 0;
-        left: 0;
     }
     <?php echo '#ibx-fomo-' . $id; ?> .ibx-fomo-bar-wrapper .ibx-fomo-countdown-wrapper {
         background: <?php if ( $settings->countdown_background_color != '' ) { echo $settings->countdown_background_color; } else { echo '#ff0000'; } ?>;
         color: <?php if ( $settings->countdown_text_color != '' ) { echo $settings->countdown_text_color; } else { echo '#ffffff'; } ?>;
     }
+    <?php echo '#ibx-fomo-' . $id; ?> .ibx-fomo-bar-wrapper {
+        border: <?php if ( $settings->border != '' ) { echo ( $settings->border ).'px'; } else { echo '0px'; } ?> solid <?php if ( $settings->border_color != '' ) { echo ( $settings->border_color ) ; } else { echo '#000'; } ?>;
+
+        <?php if ( $settings->shadow_strength != '' ) { $strength = ( $settings->shadow_strength ).'px'; } else { $strength = '0px'; } ?>;
+        <?php if ( $settings->shadow_blur != '' ) { $blur = ( $settings->shadow_blur ).'px'; } else { $blur = '0px'; } ?>;
+        <?php if ( $settings->shadow_color != '' ) { $shadow_color = $settings->shadow_color; } else { $shadow_color = '#999999'; } ?>;
+
+        -webkit-box-shadow: 0 0 <?php echo $strength.' '.$blur.' '.$shadow_color; ?>;
+            -moz-box-shadow: 0 0 <?php echo $strength.' '.$blur.' '.$shadow_color; ?>;
+            -o-box-shadow: 0 0 <?php echo $strength.' '.$blur.' '.$shadow_color; ?>;
+            box-shadow: 0 0 <?php echo $strength.' '.$blur.' '.$shadow_color; ?>;
+    }
+
 </style>

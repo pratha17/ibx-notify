@@ -164,12 +164,31 @@ if ( ! class_exists( 'IBX_Notify_Frontend' ) ) {
                         break;
                 }
             }
+            ?>
+
+            <?php if ( 'fomo_bar' != $settings->type ) : ?>
+            <style id="ibx-notification-<?php echo $id; ?>-style">
+                .ibx-notification-popup-wrapper .ibx-notification-popup-content {
+                    background: <?php if( $settings->background_color ) { echo $settings->background_color; } else { echo '#ffffff'; } ?>;
+                    color: <?php if( $settings->text_color ) { echo $settings->text_color; }else{ echo '#00000'; } ?>;
+                }
+                .ibx-notification-popup-wrapper .ibx-notification-popup-content span{
+                    color: <?php if( $settings->star_color ){ echo $settings->star_color; }else{ echo '#00000'; } ?>;
+                    font-size: 20px;
+                }
+                .ibx-notification-popup-wrapper .close {
+                    color: <?php if( $settings->text_color ){ echo $settings->text_color; }else{ echo '#00000'; } ?>;
+                    background: <?php if( $settings->background_color ){ echo $settings->background_color; }else{ echo '#ffffff'; } ?>;
+                }
+            </style>
+            <?php endif;
 
             if ( ! empty( $conversion_ids ) ) {
                 ?>
                 <script type="text/javascript">
                     var ibx_fomo_conversion_nonce = '<?php echo wp_create_nonce('ibx_fomo_conversion_nonce_front'); ?>';
                     var ibx_fomo_conversion_ids = <?php echo json_encode( $conversion_ids ); ?>;
+                    var ibx_fomo_ajax_url   = '<?php echo admin_url('admin-ajax.php'); ?>';
                 </script>
                 <?php
             }

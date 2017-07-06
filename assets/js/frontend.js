@@ -1,16 +1,42 @@
 ;(function($) {
 
+    /**
+     * The main fomo interface.
+     *
+     * @since 1.0.0
+     * @class IBXFomo
+     */
     IBXFomo = {
+        /**
+         * A flag to check whether the fomo is showing or not.
+         *
+         * @since 1.0.0
+         * @access private
+         */
         _fomoBarActive: 0,
 
+        /**
+         * Initialize fomo interface.
+         *
+         * @since 1.0.0
+         * @access private
+         * @method _init
+         */
         _init: function()
         {
-            IBXFomo._initFomo();
-            IBXFomo._initConversion();
+            IBXFomo._initFomoBar();
+            IBXFomo._initConversions();
             IBXFomo._initReviews();
             IBXFomo._bindEvents();
         },
 
+        /**
+         * Bind events.
+         *
+         * @since 1.0.0
+         * @access private
+         * @method _bindEvents
+         */
         _bindEvents: function()
         {
             $('body').delegate( '.ibx-fomo .ibx-fomo-bar-close', 'click', function() {
@@ -19,7 +45,14 @@
             } );
         },
 
-        _initFomo: function()
+        /**
+         * Initialize the fomo bar and countdown.
+         *
+         * @since 1.0.0
+         * @access private
+         * @method _initFomoBar
+         */
+        _initFomoBar: function()
         {
             var elements = $('.ibx-fomo:last');
 
@@ -84,11 +117,10 @@
                         seconds     = Math.floor( ( difference % ( 1000 * 60 )) / 1000 );
 
                     // Output the result in an element with id="ibx-fomo-countdown-time"
-                    fomo_bar.find('#ibx-fomo-countdown-time sapn.ibx-fomo-days').html(days);
-                    fomo_bar.find('#ibx-fomo-countdown-time sapn.ibx-fomo-hours').html(hours);
-                    fomo_bar.find('#ibx-fomo-countdown-time sapn.ibx-fomo-minutes').html(minutes);
-                    fomo_bar.find('#ibx-fomo-countdown-time sapn.ibx-fomo-seconds').html(seconds);
-
+                    fomo_bar.find('.ibx-fomo-days').html(days);
+                    fomo_bar.find('.ibx-fomo-hours').html(hours);
+                    fomo_bar.find('.ibx-fomo-minutes').html(minutes);
+                    fomo_bar.find('.ibx-fomo-seconds').html(seconds);
                     // If the count down is over, write some text
                     if ( difference < 0 ) {
                         clearInterval( countdown_interval );
@@ -121,8 +153,8 @@
 
             setTimeout(function() {
                 $('html').addClass('ibx-fomo-bar-active');
-                $('body').css( 'margin-top', ( fomo_bar_height ) + 'px' );
-                fomo_bar.find('.ibx-fomo-bar-wrapper').css( 'margin-top', admin_bar_height + 'px' );
+                $('html').animate({ 'padding-top': fomo_bar_height + 'px' }, 300);
+
                 IBXFomo._fomoBarActive = 1;
             }, initial_delay * 1000);
         },
@@ -134,21 +166,90 @@
                 admin_bar_height    = ( $('#wpadminbar').length > 0 ) ? $('#wpadminbar').outerHeight() : 0;
 
             $('html').removeClass('ibx-fomo-bar-active');
-            $('body').css( 'margin-top', '0px' );
-            fomo_bar.find('.ibx-fomo-bar-wrapper').css( 'margin-top', '-' + ( fomo_bar_height ) + 'px' );
+            $('body').css( 'padding-top', '0px' );
 
             IBXFomo._fomoBarActive = 0;
         },
 
-        _initConversion: function()
+        /**
+         * Initialize the fomo conversions.
+         *
+         * @since 1.0.0
+         * @access private
+         * @method _initConversion
+         */
+        _initConversions: function()
+        {
+            if ( 'undefined' === typeof ibx_fomo_conversion_ids || ibx_fomo_conversion_ids.length === 0 ) {
+                return;
+            }
+
+            var ids = ibx_fomo_conversion_ids;
+            var html = '';
+
+            $.ajax({
+                type: 'post',
+                url: ibx_fomo_ajax_url,
+                data: {
+                    action: 'ibx_fomo_get_conversions',
+                    nonce: ibx_fomo_conversion_nonce,
+                    ids: ids
+                },
+                success: function(data) {
+                    if ( data ) {
+                        data = JSON.parse( data );
+                        html = $('<div class="ibx-conversions"></div>').html(data.content);
+                        IBXFomo._showConversions(data.config, html);
+                    }
+                }
+            });
+        },
+
+        /**
+         * Initialize the fomo reviews.
+         *
+         * @since 1.0.0
+         * @access private
+         * @method _initReviews
+         */
+        _initReviews: function()
         {
 
         },
 
-        _initReviews: function()
+        _showConversions: function(config, html)
         {
+            var count       = 0,
+                elements    = html.find('.ibx-notification-popup-' + config.id);
 
-        }
+            setTimeout(function() {
+                $(elements[count]).animate({ 'bottom': '20px' });
+                setTimeout(function() {
+                    $(elements[count]).animate({ 'bottom': '-250px' });
+                    count++;
+
+                    var next = setInterval(function() {
+                        $(elements[count]).animate({ 'bottom': '20px' });
+                        setTimeout(function() {
+                            $(elements[count]).animate({ 'bottom': '-250px' });
+                            count++;
+                        }, config.display_duration);
+
+                        if ( count === config.max_per_page || count === elements.length ) {
+                            count = 0;
+                            if ( config.loop === 0 ) {
+                                clearInterval(next);
+                            }
+                        }
+                    }, config.delay_each + config.display_duration);
+
+                }, config.display_duration);
+            }, config.initial_delay);
+
+            elements.each(function() {
+
+            });
+        },
     };
 
     $(window).load(function() {
@@ -173,7 +274,7 @@ jQuery(window).load(function() {
             var count           =   0;
             var container       =   '';
 
-            var container       =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wraper' ); // creat a variable with name of div
+            var container       =   jQuery( '.' + popup_id + ' .ibx-notification-popup-wrapper' ); // creat a variable with name of div
 
             var first_appear    =   setInterval( firstShow, initial_delay );
 

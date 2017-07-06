@@ -1,15 +1,27 @@
 /** Fomo bar */
-html.ibx-fomo-bar-active body,
-.ibx-fomo-bar-wrapper {
+html.ibx-fomo-bar-active body {
     -webkit-transition: margin-top 0.3s ease;
     -moz-transition: margin-top 0.3s ease;
     transition: margin-top 0.3s ease;
 }
 .ibx-fomo-bar-wrapper {
     border-top: 0;
-    margin-top: -100px;
+    margin-top: 0;
     width: 100%;
     z-index: 9999;
+    top: 0;
+    left: 0;
+    margin-top: -999px;
+    -webkit-transition: margin-top 0.2s ease;
+    -moz-transition: margin-top 0.2s ease;
+    transition: margin-top 0.2s ease;
+    will-change: margin-top;
+}
+html.ibx-fomo-bar-active body.admin-bar .ibx-fomo-bar-wrapper {
+    margin-top: 32px;
+}
+html.ibx-fomo-bar-active body:not(.admin-bar) .ibx-fomo-bar-wrapper {
+    margin-top: 0;
 }
 .ibx-fomo-bar-wrapper .ibx-fomo-bar-content {
     padding: 0 40px;
@@ -33,23 +45,27 @@ html.ibx-fomo-bar-active body,
     padding: 10px;
     text-align: center;
     vertical-align: middle;
+    font-weight: bold;
 }
 .ibx-fomo-bar-wrapper .ibx-fomo-countdown-wrapper p {
     margin: 0;
     padding: 0;
+    font-weight: bold;
 }
 .ibx-fomo-bar-wrapper .ibx-fomo-countdown-wrapper #ibx-fomo-countdown-time span {
     font-size: 17px;
     padding: 0 4px;
     text-transform: uppercase;
 }
+.ibx-fomo-bar-wrapper .ibx-fomo-countdown-wrapper #ibx-fomo-countdown-time .ibx-fomo-expired-text,
 .ibx-fomo-bar-wrapper .ibx-fomo-countdown-wrapper #ibx-fomo-countdown-time.ibx-fomo-expired span {
     display: none;
+    font-weight: bold;
 }
 .ibx-fomo-bar-wrapper .ibx-fomo-countdown-wrapper #ibx-fomo-countdown-time.ibx-fomo-expired span.ibx-fomo-expired-text {
     display: inline;
 }
-.ibx-fomo-bar-wrapper .ibx-fomo-countdown-wrapper .ibx-fomo-countdown-text {
+.ibx-fomo-bar-wrapper .ibx-fomo-bar-text {
     color: #404040;
     display: inline-block;
     margin-right: 0px;
@@ -59,49 +75,63 @@ html.ibx-fomo-bar-active body,
 }
 
 /** Conversion */
-.ibx-notification-popup-wraper .ibx-notify-img {
+.ibx-notification-popup {
+    position: fixed;
+    width: 250px;
+    height: 90px;
+    font-size: 13px;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, .4);
+    -moz-box-shadow: 0 0 4px 0 rgba(0, 0, 0, .4);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, .4);
+    box-sizing: border-box;
+    z-index: 10000001;
+    display: block;
+    cursor: pointer;
+}
+.ibx-notification-popup.ibx-notification-bottom-left {
+    bottom: -250px;
+    left: 20px;
+}
+.ibx-notification-popup.ibx-notification-bottom-right {
+    bottom: -250px;
+    right: 20px;
+}
+.ibx-notification-popup-wrapper .ibx-notification-popup-img {
     display: table-cell;
     height: 50px;
     width: 50px;
     vertical-align: top;
 }
-.ibx-notification-popup-wraper .ibx-notify-img img {
+.ibx-notification-popup-wrapper .ibx-notification-popup-img img {
     border-radius: 10px;
     height: 100%;
     width: 100%;
 }
-.ibx-notification-popup-wraper .ibx-notify-text-wraper {
+.ibx-notification-popup-wrapper a {
+    text-decoration: none !important;
+}
+.ibx-notification-popup-wrapper .ibx-notification-popup-text-wraper {
     display: table-cell;
     padding-left: 15px;
     text-align: left;
     vertical-align: top;
 }
-.ibx-notification-popup-wraper .ibx-notify-text-content {
+.ibx-notification-popup-wrapper .ibx-notification-popup-text-content {
     line-height: 1;
     margin: 0;
 }
-.ibx-notify-rating {
+.ibx-notification-popup-rating {
     unicode-bidi: bidi-override;
     direction: rtl;
 }
-.ibx-notification-popup-wraper .ibx-notify-container span:before {
+.ibx-notification-popup-wrapper .ibx-notification-popup-content span:before {
     content: "\2605";
     position: absolute;
 }
-.ibx-notification-popup-wraper {
-    display: none;
-}
-.popup-wraper-left {
-    position: fixed;
-    bottom: 40px;
-    left: 40px;
-}
-.popup-wraper-right {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-}
-.ibx-notification-popup-wraper .close {
+.ibx-notification-popup-wrapper .ibx-notification-popup-close {
     display: block;
     cursor: pointer;
     font-size: 19px;
@@ -115,29 +145,16 @@ html.ibx-fomo-bar-active body,
     text-shadow: 0 0px 0 #fff;
     border-radius: 15px;
     opacity: 1;
-}
-.container-close {
-    padding: 15px 22px 15px 15px;
-}
-.no-close {
-    display: none;
-}
-.container-no-close {
     padding: 15px;
 }
-.clickable {
-    cursor: pointer;
-    text-decoration: none!important;
+.ibx-notification-closable .ibx-notification-popup-wrapper {
+    padding: 15px 22px 15px 15px;
 }
-.not-clickable {
-    cursor: context-menu;
-    text-decoration: none!important;
-}
-.desk_hide {
+.ibx-notification-hide-desktop {
     display: none;
 }
-@media (max-width: 770px) {
-    .mob_hide {
+@media only screen and (max-width: 767px) {
+    .ibx-notification-hide-mobile {
         display: none;
     }
 }
